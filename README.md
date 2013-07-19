@@ -21,7 +21,7 @@ I have an [active demo here](http://www.philpalmieri.com/js_sandbox/timedLogout/
 
 ### With Optional Overrides
 
-- New overrides added by me (josebalius): customCallback, multipleTabs
+New overrides added by me (josebalius): customCallback, multipleTabs
 
   $(document).ready(function(){
     $(document).idleTimeout({
