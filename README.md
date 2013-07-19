@@ -23,6 +23,7 @@ I have an [active demo here](http://www.philpalmieri.com/js_sandbox/timedLogout/
 
 New overrides added by me (josebalius): customCallback, multipleTabs
 
+<pre>
   $(document).ready(function(){
     $(document).idleTimeout({
       inactivity: 30000,
@@ -34,6 +35,7 @@ New overrides added by me (josebalius): customCallback, multipleTabs
       multipleTabs: true // Expect the user to have multiple tabs sync up using https://github.com/marcuswestin/store.js    
     });
   });
+</pre>
 
 ## The plugin has a few configuration items so you can customize it for your own needs…
 
