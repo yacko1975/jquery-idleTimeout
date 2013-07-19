@@ -1,6 +1,8 @@
 # jquery-idleTimeout
 
-Note: This is a fork from the https://github.com/philpalmieri/jquery-idleTimeout project with some modifications I have made
+Note: This is a fork from the https://github.com/philpalmieri/jquery-idleTimeout project with some modifications I have made.
+
+The following dependency has been introduced if you wish to use the Sync Tabs feature: https://github.com/marcuswestin/store.js
 
 idle Activity Timeout and logout redirect for jQuery with some enhancements
 
