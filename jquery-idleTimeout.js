@@ -4,6 +4,8 @@
 //## visit http://creativecommons.org/licenses/by-sa/3.0/us/ or send a letter 
 //## to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
 //######
+// Modified By: Jose Garcia
+// Email: jose.balius@gmail.com
 
 (function($) {
     $.fn.idleTimeout = function(options) {
