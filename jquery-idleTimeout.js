@@ -11,14 +11,16 @@
     $.fn.idleTimeout = function(options) {
         var defaults = {
             inactivity: 1200000, //20 Minutes
-            noconfirm: 10000, //10 Seconds
-            sessionAlive: 30000, //10 Minutes
+            noconfirm: 10000,    //10 Seconds
+            sessionAlive: 600000, //10 Minutes
             redirect_url: '/js_sandbox/',
             click_reset: true,
             alive_url: '/js_sandbox/',
             logout_url: '/js_sandbox/',
             multipleTabs: false,
-            customCallback: false
+            customCallback: false,
+            modalMessage: "You will be logged off",
+            modalTitle: "Auto Logout"
         };
 
         //##############################
@@ -26,7 +28,7 @@
         //##############################
         var opts = $.extend(defaults, options);
         var liveTimeout, confTimeout, sessionTimeout;
-        var modal = "<div id='modal_pop'><p>" + autoLogoutMessage + "</p></div>";
+        var modal = "<div id='modal_pop'><p>" + opts.modalMessage + "</p></div>";
         var dialog;
 
         //##############################
@@ -72,10 +74,10 @@
                 buttons: {"Stay Logged In": function() {
                         $(this).dialog('close');
                         stay_logged_in();
-                        console.log(autoLogoutStayLoggedIn);
+                        console.log("Stay Logged In");
                     }},
                 modal: true,
-                title: autoLogoutTitle
+                title: opts.modalTitle
             });
 
         }
