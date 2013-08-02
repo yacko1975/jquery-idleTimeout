@@ -1,54 +1,66 @@
 # jquery-idleTimeout
 
-Note: This is a fork from the https://github.com/philpalmieri/jquery-idleTimeout project with some modifications I have made.
+Idle activity timer and logout redirect for jQuery with some modifications from Jose Balius fork. Works with multiple tabs.
 
-The following dependency has been introduced if you wish to use the Sync Tabs feature: https://github.com/marcuswestin/store.js
+Note: This is a fork from the https://github.com/josebalius/jquery-idleTimeout project.
 
-idle Activity Timeout and logout redirect for jQuery with some enhancements
+The following dependency is required: https://github.com/marcuswestin/store.js
 
-## Demo
+Additionally, JQuery 1.7+ and JQuery UI are required.
 
-Note: This uses the jQuery UI dialog, and UI themes.  I am working on a non UI version – but it may be a while
+### Code allows for multiple tabs in the browser.
+If active tab is logged out, all inactive tabs will log out immediately.
+If warning dialog pops up on active tab, warning dialog appears on all inactive tabs too.
+Close of warning dialog on any tab will trigger the close of warning dialog on all other tabs.
 
-I have an [active demo here](http://www.philpalmieri.com/js_sandbox/timedLogout/) – it is running on a 30 second timer for the logout, and if you open firebug you will see the keep alive firing every 10 seconds.
+Heavily commented and lots of console logs. Interested in feedback.
+
+Open jquery-idleTimeout.js and configure the 'Configuration Variables' for your system or configure at run-time
 
 ## How to use
 
 ### Run with defaults
-  
+
   $(document).ready(function(){
     $(document).idleTimeout();
   });
 
 
-### With Optional Overrides
-
-New overrides added by me (josebalius): customCallback, multipleTabs
+### Configuration may be overridden at run-time
 
 <pre>
   $(document).ready(function(){
     $(document).idleTimeout({
-      inactivity: 30000,
-      noconfirm: 10000,
-      sessionAlive: 10000,
-      customCallback: function() {
-          // User decided not to stay logged in, perform custom action
+      //idleTimeLimit:      1200000,        // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
+      idleTimeLimit:        30000,          // 30 seconds for testing
+      //dialogDisplayLimit: 180000,         // Time to display the dialog before redirect (or callback) in milliseconds. 180000 = 3 Minutes
+      dialogDisplayLimit:   30000,          // 30 seconds for testing
+      redirectUrl:          '/logout',      // CAUTION: will be ignored if a customCallback is defined
+      customCallback:       function() {    // will override redirectUrl if defined
+          // User logs out, perform custom action
       },
-      multipleTabs: true // Expect the user to have multiple tabs sync up using https://github.com/marcuswestin/store.js    
+
+      // activity events to detect
+      // http://www.quirksmode.org/dom/events/
+      // https://developer.mozilla.org/en-US/docs/Web/Reference/Events
+      // JQuery on() method expects a 'space-separated' string of event names
+      // activityEvents:       'click keypress scroll wheel mousewheel mousemove', // separate each event with a space
+      activityEvents:       'click keypress scroll wheel mousewheel', // remove detection of 'mousemove' event for testing
+
+      //dialog box configuration
+      dialogTitle:          'Auto Logout',
+      dialogText:           'You are about to be logged out due to inactivity.',
+
+      // server-side session keep-alive timer & url
+      sessionKeepAliveTimer: 60000, // Ping the server at this interval in milliseconds. 60000 = 1 Minute
+      sessionKeepAliveUrl:   '/home', // url to ping
     });
   });
 </pre>
 
-## The plugin has a few configuration items so you can customize it for your own needs…
+## TODO
+Bug: When warning dialog box appears, 'active' tab will not stop countdown to logout if user clicks to 'inactive' tab and clicks 'Stay Logged In' on dialog box on 'inactive' tab.
 
-- *inactivity: 1200000* //20 Minute default (how long before showing the notice)
-- *sessionAlive: 300000*, //5 minutes default how often to hit alive_url, we use for our ajax interfaces where the page doesn’t change very often. This helps to prevent the logout screen of your app appearing in ajax callbacks.  If you set this to false it won’t send off.
-- *alive_url: ‘/path/to/your/imHere/url’*, //send alive ping to this url
-- *redirect_url: ‘/js_sandbox/’*, //Where to go when log out
-- *click_reset: true*, //Reset timeout on clicks (for ajax interface) – resets the sessionAlive timer, so we are not hitting up your app with alive_url if we just did an ajax call for another  reason.
-- *logout_url: ‘/js_sandbox/timedLogout/index.html’* //logout before redirect (url so you can completely destroy the session before redirecting to login screen)
-- *dialogTitle: ‘Auto Logout’* //Title for the notice dialog 
-- *dialogText: ‘You are about to be signed out due to inactivity.’* //Content text for the notice dialog
-- *dialogButton: ‘Stay Logged In’* //Button label to stay logged in
-- *customCallback: false // Set this to a function to take over the log out procedure
-- *multipleTabs: false // Set this to true if you wish to have your tabs sync up and show the logout modal box at the same time
+Click of tab on browser is not detected as an 'event', and does not change 'active' tab to 'clicked' tab.
+
+Choosing 'Log Out Now' on warning dialog does not run 'customCallback', if it is defined.
