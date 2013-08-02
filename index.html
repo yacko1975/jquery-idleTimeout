@@ -3,25 +3,45 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<title>idleTimeout - jQuery UI Example Page</title>
-		<link type="text/css" href="../jquery/jquery-ui-1.7.2.custom/css/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />	
+		<link type="text/css" href="../jquery/jquery-ui-1.7.2.custom/css/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
 		<script type="text/javascript" src="../jquery/jquery-ui-1.7.2.custom/js/jquery-1.3.2.min.js"></script>
 		<script type="text/javascript" src="../jquery/jquery-ui-1.7.2.custom/js/jquery-ui-1.7.2.custom.min.js"></script>
 		<script src="jquery-idleTimeout.js" type="text/javascript" charset="utf-8"></script>
-		
+
 		<script type="text/javascript" charset="utf-8">
-		  $(document).ready(function(){
-		   $(document).idleTimeout({
-		     inactivity: 30000, 
-     		 noconfirm: 10000, 
-     		 sessionAlive: 10000
-		   });
-		  });
+      $(document).ready(function(){
+        $(document).idleTimeout({
+          //idleTimeLimit:      1200000,        // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
+          idleTimeLimit:        30000,          // 30 seconds for testing
+          //dialogDisplayLimit: 180000,         // Time to display the dialog before redirect (or callback) in milliseconds. 180000 = 3 Minutes
+          dialogDisplayLimit:   30000,          // 30 seconds for testing
+          redirectUrl:          '/logout',      // CAUTION: will be ignored if a customCallback is defined
+          customCallback:       function() {    // will override redirectUrl if defined
+              // User logs out, perform custom action
+          },
+
+          // activity events to detect
+          // http://www.quirksmode.org/dom/events/
+          // https://developer.mozilla.org/en-US/docs/Web/Reference/Events
+          // JQuery on() method expects a 'space-separated' string of event names
+          // activityEvents:       'click keypress scroll wheel mousewheel mousemove', // separate each event with a space
+          activityEvents:       'click keypress scroll wheel mousewheel', // remove detection of 'mousemove' event for testing
+
+          //dialog box configuration
+          dialogTitle:          'Auto Logout',
+          dialogText:           'You are about to be logged out due to inactivity.',
+
+          // server-side session keep-alive timer & url
+          sessionKeepAliveTimer: 60000, // Ping the server at this interval in milliseconds. 60000 = 1 Minute
+          sessionKeepAliveUrl:   '/home', // url to ping
+        });
+      });
 		</script>
-		
+
 	</head>
 	<body>
 	<h1>idleTimeout - timeout test</h1>
-	  
+
 	  Timeout Clock
 
 	</body>

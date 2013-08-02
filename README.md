@@ -21,10 +21,11 @@ Open jquery-idleTimeout.js and configure the 'Configuration Variables' for your 
 
 ### Run with defaults
 
+<pre>
   $(document).ready(function(){
     $(document).idleTimeout();
   });
-
+</pre>
 
 ### Configuration may be overridden at run-time
 
