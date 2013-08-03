@@ -105,6 +105,7 @@
           get_warning_dialog();
         } else if (store.get('idleTimeoutDialogWarning') == false) {
           destroy_warning_dialog();
+          clearTimeout(dialogTimer);
         }
 
         if (store.get('idleTimeoutLoggedOut') == true) {

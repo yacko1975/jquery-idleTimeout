@@ -139,6 +139,9 @@
 
           // destroy & remove the warning dialog on this window or tab
           destroy_warning_dialog();
+
+          // stop the dialogTimer
+          clearTimeout(dialogTimer);
         }
 
         // a window or tab has logged out?
