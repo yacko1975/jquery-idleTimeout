@@ -14,7 +14,8 @@ Additionally, JQuery version 1.7+ and JQuery UI are required.
 * If warning dialog pops up on active window or tab, warning dialog appears on all other windows and tabs too.
 * If 'Stay Logged In' button on warning dialog is clicked, warning dialogs on all other windows and tabs will close too.
 
-In beta-testing. Heavily commented and many console logs. Interested in feedback & testing on multiple browsers.
+In beta-testing. Interested in feedback & testing on multiple browsers.
+Use jquery-idleTimeout-for-testing.js which is heavily commented and has many console logs.
 
 ## How to use
 
@@ -37,7 +38,7 @@ Open jquery-idleTimeout.js and configure the 'Configuration Variables' for your 
       idleTimeLimit:        30000,          // 30 seconds for testing
       //dialogDisplayLimit: 180000,         // Time to display the dialog before redirect (or callback) in milliseconds. 180000 = 3 Minutes
       dialogDisplayLimit:   30000,          // 30 seconds for testing
-      redirectUrl:          '/logout',      // redirect to this url. Set to false for no redirect
+      redirectUrl:          '/logout',      // redirect to this url
 
       // custom callback to perform before redirect
       customCallback:       false,          // set to false for no customCallback
