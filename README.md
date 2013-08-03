@@ -1,67 +1,69 @@
 # jquery-idleTimeout
 
-Idle activity timer and logout redirect for jQuery with some modifications from Jose Balius fork. Works with multiple tabs.
+Idle (no activity) timer and logout redirect for jQuery. Works with multiple windows and tabs within the same domain.
 
 Note: This is a fork from the https://github.com/josebalius/jquery-idleTimeout project.
 
-The following dependency is required: https://github.com/marcuswestin/store.js
+The following dependency is required: https://github.com/marcuswestin/store.js - version 1.3.4+
 
-Additionally, JQuery 1.7+ and JQuery UI are required.
+Additionally, JQuery version 1.7+ and JQuery UI are required.
 
-### Code allows for multiple tabs in the browser.
-If active tab is logged out, all inactive tabs will log out immediately.
-If warning dialog pops up on active tab, warning dialog appears on all inactive tabs too.
-Close of warning dialog on any tab will trigger the close of warning dialog on all other tabs.
+### Cross browser communication
+* Functions across multiple instances of a browser and across multiple tabs in the same browser window
+* If active window or tab is logged out, all inactive windows and tabs will log out immediately.
+* If warning dialog pops up on active window or tab, warning dialog appears on all other windows and tabs too.
+* If 'Stay Logged In' button on warning dialog is clicked, warning dialogs on all other windows and tabs will close too.
 
-Heavily commented and lots of console logs. Interested in feedback.
-
-Open jquery-idleTimeout.js and configure the 'Configuration Variables' for your system or configure at run-time
+In beta-testing. Heavily commented and many console logs. Interested in feedback & testing on multiple browsers.
 
 ## How to use
 
+Open jquery-idleTimeout.js and configure the 'Configuration Variables' for your system or configure at run-time.
+
 ### Run with defaults
 
-<pre>
+```Javascript
   $(document).ready(function(){
     $(document).idleTimeout();
   });
-</pre>
+```
 
 ### Configuration may be overridden at run-time
 
-<pre>
+```Javascript
   $(document).ready(function(){
     $(document).idleTimeout({
       //idleTimeLimit:      1200000,        // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
       idleTimeLimit:        30000,          // 30 seconds for testing
       //dialogDisplayLimit: 180000,         // Time to display the dialog before redirect (or callback) in milliseconds. 180000 = 3 Minutes
       dialogDisplayLimit:   30000,          // 30 seconds for testing
-      redirectUrl:          '/logout',      // CAUTION: will be ignored if a customCallback is defined
-      customCallback:       function() {    // will override redirectUrl if defined
-          // User logs out, perform custom action
-      },
+      redirectUrl:          '/logout',      // redirect to this url. Set to false for no redirect
+
+      // custom callback to perform before redirect
+      customCallback:       false,          // set to false for no customCallback
+      // customCallback:    function() {    // define custom js function
+          // User is logged out, perform custom action
+      // },
 
       // activity events to detect
       // http://www.quirksmode.org/dom/events/
       // https://developer.mozilla.org/en-US/docs/Web/Reference/Events
       // JQuery on() method expects a 'space-separated' string of event names
       // activityEvents:       'click keypress scroll wheel mousewheel mousemove', // separate each event with a space
-      activityEvents:       'click keypress scroll wheel mousewheel', // remove detection of 'mousemove' event for testing
+      activityEvents:       'click keypress scroll wheel mousewheel', // customize events for testing - remove mousemove
 
       //dialog box configuration
-      dialogTitle:          'Auto Logout',
-      dialogText:           'You are about to be logged out due to inactivity.',
+      dialogTitle:          'Session Expiration Warning',
+      dialogText:           'Because you have been inactive, your session is about to expire.',
 
       // server-side session keep-alive timer & url
       sessionKeepAliveTimer: 60000, // Ping the server at this interval in milliseconds. 60000 = 1 Minute
-      sessionKeepAliveUrl:   '/home', // url to ping
+      // sessionKeepAliveTimer: false, // Set to false to disable pings.
+      sessionKeepAliveUrl:   '/', // url to ping
     });
   });
-</pre>
+```
 
 ## TODO
-Bug: When warning dialog box appears, 'active' tab will not stop countdown to logout if user clicks to 'inactive' tab and clicks 'Stay Logged In' on dialog box on 'inactive' tab.
+Click on browser title bar or on browser tab is not detected as an activity 'event', and does not change 'active' window or tab to 'clicked' window or tab. See Issue #2.
 
-Click of tab on browser is not detected as an 'event', and does not change 'active' tab to 'clicked' tab.
-
-Choosing 'Log Out Now' on warning dialog does not run 'customCallback', if it is defined.
