@@ -9,7 +9,7 @@
 
 // Thanks to https://github.com/philpalmieri/jquery-idleTimeout & https://github.com/josebalius/jquery-idleTimeout
 // Modified By: Jill Elaine
-// Email: jillelaine01@gmail.com
+// Email: jillelaine01(at)gmail(dot)com
 
 // version 1.0
 
@@ -20,22 +20,24 @@
     //## Configuration Variables
     //##############################
     var defaults = {
-      idleTimeLimit:        1200000,        // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
-      // idleTimeLimit:     30000,          // 30 seconds for testing
-      dialogDisplayLimit:   180000,         // Time to display the dialog before redirect (or callback) in milliseconds. 180000 = 3 Minutes
-      //dialogDisplayLimit: 30000,          // 30 seconds for testing
+      //idleTimeLimit:      1200000,        // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
+      idleTimeLimit:        30000,          // 30 seconds for testing
+      //dialogDisplayLimit: 180000,         // Time to display the warning dialog before redirect (and optional callback) in milliseconds. 180000 = 3 Minutes
+      dialogDisplayLimit:   30000,          // 30 seconds for testing
       redirectUrl:          '/logout',      // redirect to this url
 
-      // custom callback to perform before redirect
+      // optional custom callback to perform before redirect
       customCallback:       false,          // set to false for no customCallback
-      // customCallback:    function() {    // define custom js function
-          // User is logged out, perform custom action
+      // customCallback:    function() {    // define optional custom js function
+          // User to be logged out, perform custom action
       // },
 
+      // configure which activity events to detect
       // http://www.quirksmode.org/dom/events/
       // https://developer.mozilla.org/en-US/docs/Web/Reference/Events
-      activityEvents:       'click keypress scroll wheel mousewheel mousemove', // separate each event with a space
-      //activityEvents:     'click keypress scroll wheel mousewheel', // customize events for testing - remove mousemove
+      // JQuery on() method (v1.7+) expects a 'space-separated' string of event names
+      // activityEvents:       'click keypress scroll wheel mousewheel mousemove', // separate each event with a space
+      activityEvents:       'click keypress scroll wheel mousewheel', // customize events for testing - remove mousemove
 
       //dialog box configuration
       dialogTitle:          'Session Expiration Warning',
@@ -103,6 +105,7 @@
 
         if (store.get('idleTimeoutDialogWarning') == true) {
           get_warning_dialog();
+          clearTimeout(idleTimer);
         } else if (store.get('idleTimeoutDialogWarning') == false) {
           destroy_warning_dialog();
           clearTimeout(dialogTimer);
