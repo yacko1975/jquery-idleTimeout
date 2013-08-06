@@ -1,6 +1,11 @@
 # jquery-idleTimeout
 
-Idle (no activity) timer and logout redirect for jQuery. Works with multiple windows and tabs within the same domain.
+Idle (no activity) timer and logout redirect for jQuery. Works cross-browser with multiple windows and tabs within the same domain.
+
+Edit the configuration options at top of script or you may configure the options when you call the function at run-time.
+
+Pops up up a warning dialog box with 2 buttons after a set amount of time of 'inactivity'.
+![Warning Dialog](JillElaine.github.com/jquery-idleTimeout/img/warning_dialog.png)
 
 Note: This is a fork from the https://github.com/josebalius/jquery-idleTimeout project.
 
