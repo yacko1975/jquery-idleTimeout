@@ -5,6 +5,7 @@ Idle (no activity) timer and logout redirect for jQuery. Works cross-browser wit
 Edit the configuration options at top of script, or you may configure the options when you call the function at run-time. Configure the 'activityEvents' variable to set which user actions will be considered 'being active'.
 
 Pops up up a warning dialog box with 2 buttons after the 'idleTimeLimit' amount of time of 'inactivity'. Warning dialog will display for the 'dialogDisplayLimit' amount of time.
+
 ![Warning Dialog](https://raw.github.com/JillElaine/jquery-idleTimeout/master/warning_dialog.png)
 
 Note: This is a fork from the https://github.com/josebalius/jquery-idleTimeout project.
