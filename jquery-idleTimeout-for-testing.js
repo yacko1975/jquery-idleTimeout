@@ -11,8 +11,8 @@
 // Modified By: Jill Elaine
 // Email: jillelaine01(at)gmail(dot)com
 
-// version 1.0
-// HEAVILY COMMENTED & LOGGED FOR TESTING & DEBUGGING
+// version 1.0.2
+// Comments and Console logs for debugging with Firefox & Firebug
 
 
 (function($) {
@@ -26,7 +26,7 @@
       //idleTimeLimit:      1200000,        // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
       idleTimeLimit:        30000,          // 30 seconds for testing
       //dialogDisplayLimit: 180000,         // Time to display the warning dialog before redirect (and optional callback) in milliseconds. 180000 = 3 Minutes
-      dialogDisplayLimit:   30000,          // 30 seconds for testing
+      dialogDisplayLimit:   20000,          // 20 seconds for testing
       redirectUrl:          '/logout',      // redirect to this url
 
       // optional custom callback to perform before redirect
@@ -56,55 +56,28 @@
     //## Private Variables
     //##############################
     var opts = $.extend(defaults, options);
-    var dialogContent = "<div id='dialog_warning_box'><p>" + opts.dialogText + "</p></div>";
-    var idleTimer, dialogTimer, lastIdleTimerStart, keepSessionAlive;
+    var idleTimer, dialogTimer, idleTimerLastActivity;
+    var checkHeartbeat = 2000; // frequency to check for timeouts
 
     //##############################
     //## Private Functions
     //##############################
 
-    // start the idle timer function
-    var start_idle_timer = function() {
-      console.log('start_idle_timer');
+    // open warning dialog function
+    var open_warning_dialog = function() {
+      var dialogContent = "<div id='idletimer_warning_dialog'><p>" + opts.dialogText + "</p></div>";
 
-      clearTimeout(idleTimer);
-      clearTimeout(dialogTimer);
-
-      lastIdleTimerStart = $.now(); // http://api.jquery.com/jQuery.now/
-
-      if (store.enabled) {
-
-        // set storage values for cross-browser functionality
-        store.set("lastIdleTimerStart", lastIdleTimerStart);
-        store.set('idleTimeoutDialogWarning', false);
-        store.set('idleTimeoutLoggedOut', false);
-
-        console.log('start_idle_timer lastIdleTimerStart: ' + store.get("lastIdleTimerStart"));
-      } else {
-        alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
-      }
-
-      // start the countdown before display of warning dialog
-      idleTimer = setTimeout(start_dialog_timer, opts.idleTimeLimit);
-    };
-
-    // create the warning dialog function
-    var get_warning_dialog = function() {
       var warningDialog = $(dialogContent).dialog({
         buttons: {
-          // Button one - immediately log out
-          "Log Out Now": function() {
-            console.log('user clicked "Log Out Now" button');
-
-            perform_logout_procedure();
-          },
-          // Button two - stay logged in
           "Stay Logged In": function() {
-            console.log('user clicked "Stay Logged In" button');
-
+            console.log('Stay Logged In button clicked');
             destroy_warning_dialog();
-
+            stop_dialog_timer();
             start_idle_timer();
+          },
+          "Log Out Now": function() {
+            console.log('Log Out Now button clicked');
+            logout_user();
           }
         },
         closeOnEscape: false,
@@ -116,92 +89,90 @@
       $('.ui-dialog-titlebar-close').css('display', 'none');
     };
 
+    // is dialog open function
+    var is_dialog_open = function() {
+      var dialogOpen = $('#idletimer_warning_dialog').dialog('isOpen');
+
+      if (dialogOpen === true) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    // destroy warning dialog function
     var destroy_warning_dialog = function() {
+      console.log('dialog destroyed');
       $(".ui-dialog-content").dialog('destroy').remove();
     };
 
-    // react to a 'storage' event change function
-    var storage_event_reactor = function(event) {
-      console.log('event key: '+ event.key);
+    // check idle timeout function
+    var checkIdleTimeout = function() {
+      var timeNow = $.now();
+      var timeIdleTimeout = (store.get('idleTimerLastActivity') + opts.idleTimeLimit);
 
-      // ignore lastIdleTimerStart events. React only to DialogWarning & LoggedOut events.
-      if (event.key != 'lastIdleTimerStart') {
-
-        // warning dialog has appeared on a window or tab?
-        if (store.get('idleTimeoutDialogWarning') == true) {
-          console.log('pop up the warning dialog on this window or tab');
-
-          // show the popup warning dialog on this window or tab too
-          get_warning_dialog();
-
-          // stop the idleTimer
-          clearTimeout(idleTimer);
-
-        } else if (store.get('idleTimeoutDialogWarning') == false) {
-          console.log('destroy the warning dialog on this window or tab');
-
-          // destroy & remove the warning dialog on this window or tab
+      if (timeNow > timeIdleTimeout) {
+        console.log('timeNow: ' + timeNow + ' > idle ' + timeIdleTimeout);
+        if (is_dialog_open() !== true) {
+          console.log('dialog is not open & will be opened');
+          open_warning_dialog();
+          start_dialog_timer();
+        }
+      } else if (store.get('idleTimerLoggedOut') === true) { //a 'manual' user logout?
+        logout_user();
+      } else {
+        console.log('idle not yet timed out');
+        if (is_dialog_open() === true) {
+          console.log('dialog is open & will be closed');
           destroy_warning_dialog();
-
-          // stop the dialogTimer
-          clearTimeout(dialogTimer);
-        }
-
-        // a window or tab has logged out?
-        if (store.get('idleTimeoutLoggedOut') == true) {
-          console.log('log out this window or tab');
-
-          // log out this window or tab
-          perform_logout_procedure();
+          stop_dialog_timer();
         }
       }
     };
 
-    // pop up the warning dialog & start the warning dialog timer function
+    // start idle timer function
+    var start_idle_timer = function() {
+      stop_idle_timer();
+      idleTimerLastActivity = $.now();
+
+      store.set('idleTimerLastActivity', idleTimerLastActivity);
+      console.log('start idle timer: ' + idleTimerLastActivity);
+
+      idleTimer = setInterval(checkIdleTimeout, checkHeartbeat);
+    };
+
+    // stop idle timer function
+    var stop_idle_timer = function() {
+      clearInterval(idleTimer);
+    };
+
+    // check dialog timeout function
+    var checkDialogTimeout = function() {
+      var timeNow = $.now();
+      var timeDialogTimeout = (store.get('idleTimerLastActivity') + opts.idleTimeLimit + opts.dialogDisplayLimit);
+
+      if ((timeNow > timeDialogTimeout) || (store.get('idleTimerLoggedOut') === true)) {
+        console.log('timeNow: ' + timeNow + ' > dialog' + timeDialogTimeout);
+        logout_user();
+      } else {
+        console.log('dialog not yet timed out');
+      }
+    };
+
+    // start dialog timer function
     var start_dialog_timer = function() {
-      console.log('start_dialog_timer');
-
-      clearTimeout(idleTimer);
-
-      if (store.enabled) {
-        console.log('last: ' + lastIdleTimerStart + ' stored-lastIdleTimerStart: ' + store.get('lastIdleTimerStart'));
-
-        // if these values are equal, then this is the most recent active window or tab
-        if (lastIdleTimerStart === store.get('lastIdleTimerStart')) {
-          console.log('This is the active window or tab');
-
-          // set storage idleTimeoutDialogWarning value
-          store.set('idleTimeoutDialogWarning', true);
-
-          // get the popup warning dialog
-          get_warning_dialog();
-
-          // start the countdown to redirect
-          dialogTimer = setTimeout(perform_logout_procedure, opts.dialogDisplayLimit);
-
-        } else {
-          console.log('This is NOT the active window or tab');
-        }
-
-      } else {
-        alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
-      }
+      dialogTimer = setInterval(checkDialogTimeout, checkHeartbeat);
     };
 
-    // logout procedure function
-    var perform_logout_procedure = function() {
-      console.log('perform_logout_procedure');
+    // stop dialog timer function
+    var stop_dialog_timer = function() {
+      clearInterval(dialogTimer);
+    };
 
-      clearInterval(keepSessionAlive);
-      clearTimeout(idleTimer);
-      clearTimeout(dialogTimer);
-
-      if (store.enabled) {
-        // set storage idleTimeoutLoggedOut value
-        store.set('idleTimeoutLoggedOut', true);
-      } else {
-        alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
-      }
+    // perform logout procedure function
+    var logout_user = function() {
+      console.log('logout function');
+      store.set('idleTimerLoggedOut', true);
 
       if (opts.customCallback) {
         console.log('custom callback');
@@ -213,16 +184,38 @@
       }
     };
 
+    // activity detector function
+    // if warning dialog is NOT open, restarts idle timer
+    var activity_detector = function() {
+
+      $('body').on(opts.activityEvents, function() {
+
+        if (is_dialog_open() !== true) {
+          console.log('activity detected');
+          start_idle_timer();
+        } else {
+          console.log('dialog open. activity ignored');
+        }
+
+      });
+    };
+
     // if keep-alive sessionKeepAliveTimer value is not false,
     // ping the server at regular intervals to prevent a server idle timeout
-    if (opts.sessionKeepAliveTimer) {
-      var keep_session = function() {
-        console.log('keep session alive function');
-        $.get(opts.sessionKeepAliveUrl);
-      };
+    var keep_session_alive = function() {
 
-      keepSessionAlive = setInterval(keep_session, opts.sessionKeepAliveTimer);
-    }
+      if (opts.sessionKeepAliveTimer) {
+        var keep_session = function() {
+          // if this is the most recently active window or tab
+          if (idleTimerLastActivity == store.get('idleTimerLastActivity')) {
+            console.log('keep session alive function');
+            $.get(opts.sessionKeepAliveUrl);
+          }
+        };
+
+        setInterval(keep_session, opts.sessionKeepAliveTimer);
+      }
+    };
 
     //###############################
     // Build & Return the instance of the item as a plugin
@@ -231,26 +224,20 @@
     return this.each(function() {
       console.log('instance started');
 
+      if (store.enabled) {
+        // initial values
+        idleTimerLastActivity = $.now();
+        store.set('idleTimerLastActivity', idleTimerLastActivity);
+        store.set('idleTimerLoggedOut', false);
+      } else {
+        alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
+      }
+
+      activity_detector();
+
+      keep_session_alive();
+
       start_idle_timer();
-
-      // activity detector - restart idle timer if warning dialog is not open
-      $('body').on(opts.activityEvents, function() {
-
-          // warning dialog must be destroyed & removed, not just closed, to use this var as a test of dialog 'open-ness'
-          var dialogOpen = $('#dialog_warning_box').dialog('isOpen');
-
-          // ignore all activity if the warning dialog is open. Click of buttons on warning dialog are not ignored.
-          if (dialogOpen === true) {
-            console.log('warning dialog is open - activity ignored');
-          } else {
-            console.log('warning dialog is closed - timer restarted');
-
-            start_idle_timer();
-          }
-        });
-
-      // all windows and tabs listen for storage events
-      window.addEventListener('storage', storage_event_reactor, false);
     });
   }
 })(jQuery);

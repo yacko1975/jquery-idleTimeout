@@ -15,15 +15,13 @@
       $(document).ready(function(){
         $(document).idleTimeout({
           idleTimeLimit:      1200000,        // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
-          // idleTimeLimit:        30000,     // 30 seconds for testing
           dialogDisplayLimit: 180000,         // Time to display the warning dialog before redirect (and optional callback) in milliseconds. 180000 = 3 Minutes
-          // dialogDisplayLimit:   30000,     // 30 seconds for testing
-          redirectUrl:          '/logout',    // redirect to this url
+          redirectUrl:        '/logout',      // redirect to this url
 
           // optional custom callback to perform before redirect
-          customCallback:       false,        // set to false for no customCallback
-          // customCallback:    function() {  // define optional custom js function
-              // User to be logged out, perform custom action
+          customCallback:       false,          // set to false for no customCallback
+          // customCallback:    function() {    // define optional custom js function
+              // perform custom action before logout
           // },
 
           // configure which activity events to detect
@@ -36,9 +34,9 @@
           dialogText:           'Because you have been inactive, your session is about to expire.',
 
           // server-side session keep-alive timer & url
-          sessionKeepAliveTimer: 60000,    // Ping the server at this interval in milliseconds. 60000 = 1 Minute
+          sessionKeepAliveTimer: 60000, // Ping the server at this interval in milliseconds. 60000 = 1 Minute
           // sessionKeepAliveTimer: false, // Set to false to disable pings.
-          sessionKeepAliveUrl:   '/',      // url to ping
+          sessionKeepAliveUrl:   '/', // url to ping
         });
       });
 		</script>
