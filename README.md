@@ -1,18 +1,16 @@
 # jquery-idleTimeout
 
-Idle (no activity) timer and logout redirect for jQuery. Works cross-browser with multiple windows and tabs within the same domain.
+Configurable idle (no activity) timer and logout redirect for jQuery.
 
-Edit the configuration options at top of script, or you may configure the options when you call the idleTimeout function at run-time. Configure the 'activityEvents' variable to set which user actions will be considered 'being active'.
+<strong>Works cross-browser with multiple windows and tabs within the same domain.</strong>
 
-Pops up up a warning dialog box with 2 buttons, 'Stay Logged In' & 'Log Out Now', after the 'idleTimeLimit' amount of time of 'inactivity'. Warning dialog will display for the 'dialogDisplayLimit' amount of time.
+After the 'idleTimeLimit' amount of time of user inactivity, a warning dialog box with 2 buttons, 'Stay Logged In' & 'Log Out Now', appears. 'Stay Logged In' button may be activated with mouse click or press of Enter key.
+
+Warning dialog will display for the 'dialogDisplayLimit' amount of time. If no user activity, idleTimer will redirect user to 'redirectUrl'.
 
 ![Warning Dialog](https://raw.github.com/JillElaine/jquery-idleTimeout/master/warning_dialog.png)
 
-Note: This is a fork from the https://github.com/josebalius/jquery-idleTimeout project.
-
-The following dependency is required: https://github.com/marcuswestin/store.js - version 1.3.4+
-
-Additionally, JQuery version 1.7+ and JQuery UI are required.
+Any needed logout (session close) functions may be added to your 'redirectUrl' page or to the optional 'customCallback'.
 
 ### Cross browser communication within the same domain
 
@@ -22,17 +20,27 @@ Additionally, JQuery version 1.7+ and JQuery UI are required.
 * If 'Stay Logged In' button on warning dialog is clicked, warning dialogs on all other windows and tabs will disappear too.
 * If 'Log Out Now' button on warning dialog is clicked, all other windows and tabs will log out too.
 
+### System requirements
+
+The following dependency is required: https://github.com/marcuswestin/store.js - version 1.3.4+
+
+Additionally, JQuery version 1.7+ and JQuery UI are required.
+
+Note: This is a fork from the https://github.com/josebalius/jquery-idleTimeout project.
+
 ### Tested in These Browsers
 
 * Mozilla Firefox v22.0
 * Internet Explorer v8
 
-In beta-testing. Interested in feedback & testing on multiple browsers.
-Use jquery-idleTimeout-for-testing.js with Firefox with Firebug add-on for debugging.
+Interested in feedback & testing on multiple browsers.
+Use jquery-idleTimeout-for-testing.js with Firefox with Firebug add-on or similar for debugging.
 
 ## How to use
 
-Open jquery-idleTimeout.js and configure the 'Configuration Variables' for your system or configure at run-time.
+You must configure the 'redirectUrl' to redirect to a page within your website.
+
+Use the script with the other defaults or edit the other configuration options at top of jquery-idleTimeout.js script. Or configure the options when you call the idleTimeout function at run-time.
 
 ### Run with defaults
 
