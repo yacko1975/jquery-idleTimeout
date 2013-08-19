@@ -95,7 +95,7 @@ Note that the store.js must be loaded.
       } else {
         alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
       }
-    }
+    });
   </script>
 ```
 
