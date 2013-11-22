@@ -48,7 +48,7 @@
       // server-side session keep-alive timer & url
       sessionKeepAliveTimer: 60000, // Ping the server at this interval in milliseconds. 60000 = 1 Minute
       // sessionKeepAliveTimer: false, // Set to false to disable pings.
-      sessionKeepAliveUrl: '/', // url to ping
+      sessionKeepAliveUrl: '/' // url to ping
     };
 
     //##############################
@@ -57,6 +57,7 @@
     var opts = $.extend(defaults, options);
     var idleTimer, dialogTimer, idleTimerLastActivity;
     var checkHeartbeat = 2000; // frequency to check for timeouts
+    var origTitle = document.title; // save original browser title
 
     //##############################
     //## Private Functions
@@ -86,6 +87,9 @@
 
       // hide the dialog's upper right corner "x" close button
       $('.ui-dialog-titlebar-close').css('display', 'none');
+
+      // modify browser title
+      document.title = opts.dialogTitle;
     };
 
     // is dialog open function
@@ -103,6 +107,8 @@
     var destroyWarningDialog = function() {
       console.log('dialog destroyed');
       $(".ui-dialog-content").dialog('destroy').remove();
+      // restore original browser title
+      document.title = origTitle;
     };
 
     // check idle timeout function

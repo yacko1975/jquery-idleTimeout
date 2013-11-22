@@ -6,6 +6,8 @@ Configurable idle (no activity) timer and logout redirect for jQuery.
 
 After the 'idleTimeLimit' amount of time of user inactivity, a warning dialog box with 2 buttons, 'Stay Logged In' & 'Log Out Now', appears. 'Stay Logged In' button may be activated with mouse click or press of Enter key.
 
+Browser window(s) title bar(s) and tab(s) display warning if user exceeds 'idleTimeLimit'. Original browser title restored to all windows and tabs when warning dialog is dismissed.
+
 Warning dialog will display for the 'dialogDisplayLimit' amount of time. If no user activity, idleTimer will redirect user to 'redirectUrl'.
 
 ![Warning Dialog](https://raw.github.com/JillElaine/jquery-idleTimeout/master/warning_dialog.png)
@@ -31,6 +33,7 @@ Additionally, JQuery version 1.7+ and JQuery UI are required.
 * Mozilla Firefox v22.0
 * Internet Explorer v8
 
+Interested in feedback & testing on multiple browsers.
 Use jquery-idleTimeout-for-testing.js with Firefox with Firebug add-on or similar for debugging.
 
 ## How to use
@@ -42,25 +45,22 @@ Use the script with the other defaults or edit the other configuration options a
 ### Run with defaults
 
 ```Javascript
-<script type="text/javascript">
   $(document).ready(function(){
     $(document).idleTimeout();
   });
-</script>
 ```
 
 ### Configuration may be overridden at run-time
 
 ```Javascript
-<script type="text/javascript">
   $(document).ready(function(){
     $(document).idleTimeout({
-      idleTimeLimit: 1200000,       // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
-      dialogDisplayLimit: 180000,   // Time to display the warning dialog before redirect (and optional callback) in milliseconds. 180000 = 3 Minutes
-      redirectUrl: '/logout',       // redirect to this url
+      idleTimeLimit:      1200000,        // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
+      dialogDisplayLimit: 180000,         // Time to display the warning dialog before redirect (and optional callback) in milliseconds. 180000 = 3 Minutes
+      redirectUrl:        '/logout',      // redirect to this url
 
       // optional custom callback to perform before redirect
-      customCallback: false,       // set to false for no customCallback
+      customCallback:       false,          // set to false for no customCallback
       // customCallback:    function() {    // define optional custom js function
           // perform custom action before logout
       // },
@@ -68,19 +68,18 @@ Use the script with the other defaults or edit the other configuration options a
       // configure which activity events to detect
       // http://www.quirksmode.org/dom/events/
       // https://developer.mozilla.org/en-US/docs/Web/Reference/Events
-      activityEvents: 'click keypress scroll wheel mousewheel mousemove', // separate each event with a space
+      activityEvents:       'click keypress scroll wheel mousewheel mousemove', // separate each event with a space
 
       //dialog box configuration
-      dialogTitle: 'Session Expiration Warning',
-      dialogText: 'Because you have been inactive, your session is about to expire.',
+      dialogTitle:          'Session Expiration Warning',
+      dialogText:           'Because you have been inactive, your session is about to expire.',
 
       // server-side session keep-alive timer & url
       sessionKeepAliveTimer: 60000, // Ping the server at this interval in milliseconds. 60000 = 1 Minute
       // sessionKeepAliveTimer: false, // Set to false to disable pings.
-      sessionKeepAliveUrl: '/',  // url to ping
+      sessionKeepAliveUrl:   '/' // url to ping
     });
   });
-</script>
 ```
 
 ## Optional functionality
@@ -99,3 +98,7 @@ Note that the store.js must be loaded.
     });
   </script>
 ```
+
+## TODO
+Click on browser title bar or on browser tab is not detected as an activity 'event'. See Issue #2.
+

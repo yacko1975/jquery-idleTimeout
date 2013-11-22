@@ -8,7 +8,7 @@
  * Works cross-browser with multiple windows and tabs within the same domain.
  *
  * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
- * v1.0.3
+ * v1.0.4
  */
 
 (function($) {
@@ -40,7 +40,7 @@
       // server-side session keep-alive timer & url
       sessionKeepAliveTimer: 60000, // Ping the server at this interval in milliseconds. 60000 = 1 Minute
       // sessionKeepAliveTimer: false, // Set to false to disable pings.
-      sessionKeepAliveUrl: '/',  // url to ping
+      sessionKeepAliveUrl: '/'  // url to ping
     };
 
     //##############################
@@ -49,6 +49,7 @@
     var opts = $.extend(defaults, options);
     var idleTimer, dialogTimer, idleTimerLastActivity;
     var checkHeartbeat = 2000; // frequency to check for timeouts - 2000 = 2 seconds.
+    var origTitle = document.title; // save original browser title
 
     //##############################
     //## Private Functions
@@ -75,6 +76,7 @@
 
       // hide the dialog's upper right corner "x" close button
       $('.ui-dialog-titlebar-close').css('display', 'none');
+      document.title = opts.dialogTitle;
     };
 
     var isDialogOpen = function() {
@@ -89,6 +91,7 @@
 
     var destroyWarningDialog = function() {
       $(".ui-dialog-content").dialog('destroy').remove();
+      document.title = origTitle;
     };
 
     var checkIdleTimeout = function() {
