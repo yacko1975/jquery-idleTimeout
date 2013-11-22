@@ -10,7 +10,7 @@
  * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
  *
  * Commented and console logged for debugging with Firefox & Firebug or similar
- * v1.0.3
+ * v1.0.4
  */
 
 (function($) {
