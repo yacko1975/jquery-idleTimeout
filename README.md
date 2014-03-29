@@ -14,6 +14,12 @@ Warning dialog will display for the 'dialogDisplayLimit' amount of time. If no u
 
 Any needed logout (session close) functions may be added to your 'redirectUrl' page or to the optional 'customCallback'.
 
+### Countdown Timer Version
+
+Use jquery-idleTimeout-with-countdown.js to add a 'Time remaining' in seconds display to the warning dialog box.
+
+![Warning Dialog](https://raw.github.com/JillElaine/jquery-idleTimeout/master/warning_dialog_countdown.png)
+
 ### Cross browser communication within the same domain
 
 * Functions across multiple instances of a browser and across multiple tabs in the same browser window within the same domain
