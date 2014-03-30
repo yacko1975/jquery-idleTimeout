@@ -1,5 +1,8 @@
 Changelog - JillElaine/jquery-idleTimeout.js
 --------------------------------------------
+all versions:
++ Change to MIT License
+
 v1.0.5
 + Add 'Time remaining' countdown to warning dialog version: jquery-idleTimeout-with-countdown.js
 

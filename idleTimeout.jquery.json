@@ -22,6 +22,5 @@
   "homepage": "https://github.com/JillElaine/jquery-idleTimeout",
   "docs": "https://github.com/JillElaine/jquery-idleTimeout",
   "demo": "http://jillelaine.github.io",
-  "bugs": "https://github.com/JillElaine/jquery-idleTimeout/issues",
-  "download": "https://github.com/JillElaine/jquery-idleTimeout/blob/master/jquery-idleTimeout.js"
+  "bugs": "https://github.com/JillElaine/jquery-idleTimeout/issues"
 }
