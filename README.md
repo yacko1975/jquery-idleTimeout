@@ -4,6 +4,8 @@ Configurable idle (no activity) timer and logout redirect for jQuery.
 
 <strong>Works cross-browser with multiple windows and tabs within the same domain.</strong>
 
+### Demo Page - http://jillelaine.github.io
+
 After the 'idleTimeLimit' amount of time of user inactivity, a warning dialog box with 2 buttons, 'Stay Logged In' & 'Log Out Now', appears. 'Stay Logged In' button may be activated with mouse click or press of Enter key.
 
 Browser window(s) title bar(s) and tab(s) display warning if user exceeds 'idleTimeLimit'. Original browser title restored to all windows and tabs when warning dialog is dismissed.
