@@ -2,7 +2,9 @@
 
 Configurable idle (no activity) timer and logout redirect for jQuery.
 
-<strong>Works cross-browser with multiple windows and tabs within the same domain.</strong>
+<strong>Functions across multiple browser windows and tabs within the same domain.</strong> Requires https://github.com/marcuswestin/store.js which allows communication across a wide variety of browser types and versions.
+
+Listed on JQuery's Plugin site: http://plugins.jquery.com/idleTimeout/
 
 ### Demo Page - http://jillelaine.github.io
 

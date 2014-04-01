@@ -54,7 +54,7 @@
     //##############################
 
     var openWarningDialog = function() {
-     var dialogContent = "<div id='idletimer_warning_dialog'><p>" + opts.dialogText + "</p><p style='display:inline'>Time remaining: <div style='display:inline' id='countdownDisplay'></div> seconds.</p></div>";
+     var dialogContent = "<div id='idletimer_warning_dialog'><p>" + opts.dialogText + "</p><p style='display:inline'>Time remaining: <div style='display:inline' id='countdownDisplay'></div></p></div>";
 
       var warningDialog = $(dialogContent).dialog({
         buttons: {
@@ -91,15 +91,19 @@
       }
     };
 
-    // display remaining seconds on warning dialog
+    // display remaining time on warning dialog
     var countdownSecondsDisplay = function() {
       var dialogDisplaySeconds = opts.dialogDisplayLimit / 1000;
+      var mins, secs;
 
       remainingTimer = setInterval(function() {
-          $('#countdownDisplay').html(dialogDisplaySeconds);
+          mins = Math.floor(dialogDisplaySeconds / 60); // minutes
+          if (mins < 10) { mins = '0' + mins };
+          secs = dialogDisplaySeconds - (mins * 60); // seconds
+          if (secs < 10) { secs = '0' + secs };
+          $('#countdownDisplay').html(mins + ':' + secs);
           dialogDisplaySeconds -= 1;
         }, 1000);
-
     };
 
     var destroyWarningDialog = function() {
