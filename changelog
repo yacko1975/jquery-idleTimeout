@@ -4,7 +4,7 @@ all versions:
 + Change to MIT License
 
 v1.0.5
-+ Add 'Time remaining' countdown to warning dialog version: jquery-idleTimeout-with-countdown.js
++ Add 'Time remaining' countdown to warning dialog
 
 v1.0.4
 + Add modification of browser title(s) and tab(s) when warning dialog appears. Original browser title restored if warning dialog dismissed.
