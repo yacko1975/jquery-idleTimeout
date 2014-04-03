@@ -2,7 +2,7 @@
 
 Configurable idle (no activity) timer and logout redirect for jQuery.
 
-<strong>Functions across multiple browser windows and tabs within the same domain.</strong> Requires https://github.com/marcuswestin/store.js which allows communication across a wide variety of browser types and versions.
+<strong>Functions across multiple browser windows and tabs within the same domain.</strong> Requires https://github.com/marcuswestin/store.js which uses localStorage, globalStorage and userData behavior to 'communicate' across multiple browser windows/tabs without cookies or flash.
 
 Listed on JQuery's Plugin site: http://plugins.jquery.com/idleTimeout/
 
@@ -10,7 +10,9 @@ Listed on JQuery's Plugin site: http://plugins.jquery.com/idleTimeout/
 
 After the 'idleTimeLimit' amount of time of user inactivity, a warning dialog box with 2 buttons, 'Stay Logged In' & 'Log Out Now', appears. 'Stay Logged In' button may be activated with mouse click or press of Enter key.
 
-Browser window(s) title bar(s) and tab(s) display warning if user exceeds 'idleTimeLimit'. Original browser title restored to all windows and tabs when warning dialog is dismissed.
+Warning dialog includes countdown 'Time remaining' display.
+
+Browser window/tab title bar(s) display warning if user exceeds 'idleTimeLimit'. Original browser title restored to all windows/tabs when warning dialog is dismissed.
 
 Warning dialog will display for the 'dialogDisplayLimit' amount of time. If no user activity, idleTimer will redirect user to 'redirectUrl'.
 
@@ -18,18 +20,12 @@ Warning dialog will display for the 'dialogDisplayLimit' amount of time. If no u
 
 Any needed logout (session close) functions may be added to your 'redirectUrl' page or to the optional 'customCallback'.
 
-### Countdown Timer Version
-
-Use jquery-idleTimeout-with-countdown.js to add a 'Time remaining' in seconds display to the warning dialog box.
-
-![Warning Dialog](https://raw.github.com/JillElaine/jquery-idleTimeout/master/warning_dialog_countdown.png)
-
 ### Cross browser communication within the same domain
 
-* Functions across multiple instances of a browser and across multiple tabs in the same browser window within the same domain
+* Functions across multiple instances of a browser and across multiple tabs within the same domain
 * If a window or tab is logged out, all other windows and tabs will log out too.
 * If warning dialog pops up on a window or tab, warning dialog appears on all other windows and tabs too.
-* If 'Stay Logged In' button on warning dialog is clicked, warning dialogs on all other windows and tabs will disappear too.
+* If 'Stay Logged In' button on warning dialog is clicked, warning dialogs on all other windows and tabs will be dismissed too.
 * If 'Log Out Now' button on warning dialog is clicked, all other windows and tabs will log out too.
 
 ### System requirements
@@ -50,7 +46,7 @@ Use jquery-idleTimeout-for-testing.js with Firefox with Firebug add-on or simila
 
 You must configure the 'redirectUrl' to redirect to a page within your website.
 
-Use the script with the other defaults or edit the other configuration options at top of jquery-idleTimeout.js script. Or configure the options when you call the idleTimeout function at run-time.
+Use the script with default settings or edit the other configuration variables at top of jquery-idleTimeout.js script. Or configure the options when you call the idleTimeout function at run-time.
 
 ### Run with defaults
 
@@ -93,9 +89,9 @@ Use the script with the other defaults or edit the other configuration options a
 ```
 
 ## Optional functionality
-If user manually logs out (without use of idleTimer), you can force all other windows & tabs within the same domain to redirect to the 'redirectUrl' page by adding a small snippet of javascript to the user's 'logout' page.
+If user manually logs out with a click of your site's 'Logout' button and not with use of the idleTimer function, you can force all 'same domain' windows/tabs to redirect to your 'redirectUrl' page by adding a small snippet of javascript to the user's 'redirectUrl' page.
 
-Note that the store.js must be loaded.
+Note: all required scripts must be available on the 'redirectUrl' page for this to work.
 
 ```Javascript
   <script type="text/javascript">

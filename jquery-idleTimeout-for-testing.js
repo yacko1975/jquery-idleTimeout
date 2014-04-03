@@ -7,7 +7,7 @@
  * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
  *
  * Commented and console logged for debugging with Firefox & Firebug or similar
- * version 1.0.4
+ * version 1.0.5
  **/
 
 (function($) {
@@ -52,8 +52,8 @@
     //## Private Variables
     //##############################
     var opts = $.extend(defaults, options);
-    var idleTimer, dialogTimer, idleTimerLastActivity;
-    var checkHeartbeat = 2000; // frequency to check for timeouts
+    var idleTimer, dialogTimer, remainingTimer, idleTimerLastActivity;
+    var checkHeartbeat = 2000; // frequency to check for timeouts - 2000 = 2 seconds.
     var origTitle = document.title; // save original browser title
 
     //##############################
@@ -62,7 +62,7 @@
 
     // open warning dialog function
     var openWarningDialog = function() {
-      var dialogContent = "<div id='idletimer_warning_dialog'><p>" + opts.dialogText + "</p></div>";
+      var dialogContent = "<div id='idletimer_warning_dialog'><p>" + opts.dialogText + "</p><p style='display:inline'>Time remaining: <div style='display:inline' id='countdownDisplay'></div></p></div>";
 
       var warningDialog = $(dialogContent).dialog({
         buttons: {
@@ -85,6 +85,9 @@
       // hide the dialog's upper right corner "x" close button
       $('.ui-dialog-titlebar-close').css('display', 'none');
 
+      // start the countdown display
+      countdownDisplay();
+
       // modify browser title
       document.title = opts.dialogTitle;
     };
@@ -98,6 +101,21 @@
       } else {
         return false;
       }
+    };
+
+    // display remaining time on warning dialog
+    var countdownDisplay = function() {
+      var dialogDisplaySeconds = opts.dialogDisplayLimit / 1000;
+      var mins, secs;
+
+      remainingTimer = setInterval(function() {
+          mins = Math.floor(dialogDisplaySeconds / 60); // minutes
+          if (mins < 10) { mins = '0' + mins };
+          secs = dialogDisplaySeconds - (mins * 60); // seconds
+          if (secs < 10) { secs = '0' + secs };
+          $('#countdownDisplay').html(mins + ':' + secs);
+          dialogDisplaySeconds -= 1;
+        }, 1000);
     };
 
     // destroy warning dialog function
@@ -169,6 +187,7 @@
     // stop dialog timer function
     var stopDialogTimer = function() {
       clearInterval(dialogTimer);
+      clearInterval(remainingTimer);
     };
 
     // perform logout procedure function
@@ -221,7 +240,7 @@
 
     //###############################
     // Build & Return the instance of the item as a plugin
-    // This is basically your construct.
+    // This is your construct.
     //###############################
     return this.each(function() {
       console.log('instance started');
