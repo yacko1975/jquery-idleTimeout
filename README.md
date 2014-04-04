@@ -6,7 +6,7 @@ Configurable idle (no activity) timer and logout redirect for jQuery.
 
 Listed on JQuery's Plugin site: http://plugins.jquery.com/idleTimeout/
 
-### Demo Page - http://jillelaine.github.io
+### Demo Page - http://jillelaine.github.io/jquery-idleTimeout/index.html
 
 After the 'idleTimeLimit' amount of time of user inactivity, a warning dialog box with 2 buttons, 'Stay Logged In' & 'Log Out Now', appears. 'Stay Logged In' button may be activated with mouse click or press of Enter key.
 
@@ -44,9 +44,15 @@ Use jquery-idleTimeout-for-testing.js with Firefox with Firebug add-on or simila
 
 ## How to use
 
-You must configure the 'redirectUrl' to redirect to a page within your website.
+Download the jquery-idleTimeout.min.js (minified), or download jquery-idleTimeout.js if you want to edit the configuration of the script directly. Upload the .js file and make it available to your website.
 
-Use the script with default settings or edit the other configuration variables at top of jquery-idleTimeout.js script. Or configure the options when you call the idleTimeout function at run-time.
+Do the same with https://github.com/marcuswestin/store.js: store.min.js.
+
+Call the idle-Timeout script in a 'document.ready' function somewhere on your site. See the example.html https://github.com/JillElaine/jquery-idleTimeout/blob/master/example.html
+
+Configure the 'redirectUrl' to redirect to a page within your website.
+
+Use the script with default settings or edit the other configuration variables at top of jquery-idleTimeout.js. Or configure the options when you call the idleTimeout function at run-time.
 
 ### Run with defaults
 

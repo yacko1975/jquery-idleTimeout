@@ -1,10 +1,9 @@
 Changelog - JillElaine/jquery-idleTimeout.js
 --------------------------------------------
-all versions:
-+ Change to MIT License
 
 v1.0.5
 + Add 'Time remaining' countdown to warning dialog
++ Change to MIT License
 
 v1.0.4
 + Add modification of browser title(s) and tab(s) when warning dialog appears. Original browser title restored if warning dialog dismissed.
