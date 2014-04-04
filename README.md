@@ -2,19 +2,21 @@
 
 Configurable idle (no activity) timer and logout redirect for jQuery.
 
-<strong>Functions across multiple browser windows and tabs within the same domain.</strong> Requires https://github.com/marcuswestin/store.js which uses localStorage, globalStorage and userData behavior to 'communicate' across multiple browser windows/tabs without cookies or flash.
+<strong>Functions across multiple browser windows and tabs within the same domain.</strong>
+
+Requires https://github.com/marcuswestin/store.js which uses localStorage, globalStorage and userData behavior to 'communicate' across multiple browser windows/tabs without cookies or flash.
 
 Listed on JQuery's Plugin site: http://plugins.jquery.com/idleTimeout/
 
-### Demo Page - http://jillelaine.github.io/jquery-idleTimeout/index.html
+### Demo Page - http://jillelaine.github.io/jquery-idleTimeout/
 
-After the 'idleTimeLimit' amount of time of user inactivity, a warning dialog box with 2 buttons, 'Stay Logged In' & 'Log Out Now', appears. 'Stay Logged In' button may be activated with mouse click or press of Enter key.
+After the 'idleTimeLimit' amount of user inactivity, a warning dialog box with 2 buttons, 'Stay Logged In' & 'Log Out Now', appears. 'Stay Logged In' button may be activated with mouse click or press of Enter key.
 
 Warning dialog includes countdown 'Time remaining' display.
 
-Browser window/tab title bar(s) display warning if user exceeds 'idleTimeLimit'. Original browser title restored to all windows/tabs when warning dialog is dismissed.
+Browser window/tab title bar(s) display warning if user is inactive for the 'idleTimeLimit'. Original browser title restored to all windows/tabs when warning dialog is dismissed.
 
-Warning dialog will display for the 'dialogDisplayLimit' amount of time. If no user activity, idleTimer will redirect user to 'redirectUrl'.
+Warning dialog will display for the 'dialogDisplayLimit' amount of time. If no user activity, idleTimer will redirect user to configured 'redirectUrl'.
 
 ![Warning Dialog](https://raw.github.com/JillElaine/jquery-idleTimeout/master/warning_dialog.png)
 
@@ -28,19 +30,11 @@ Any needed logout (session close) functions may be added to your 'redirectUrl' p
 * If 'Stay Logged In' button on warning dialog is clicked, warning dialogs on all other windows and tabs will be dismissed too.
 * If 'Log Out Now' button on warning dialog is clicked, all other windows and tabs will log out too.
 
-### System requirements
+### Dependencies
 
 The following dependency is required: https://github.com/marcuswestin/store.js - version 1.3.4+
 
 Additionally, JQuery version 1.7+ and JQuery UI are required.
-
-### Tested in These Browsers
-
-* Mozilla Firefox v22.0
-* Internet Explorer v8
-
-Interested in feedback & testing on multiple browsers.
-Use jquery-idleTimeout-for-testing.js with Firefox with Firebug add-on or similar for debugging.
 
 ## How to use
 
@@ -111,6 +105,9 @@ Note: all required scripts must be available on the 'redirectUrl' page for this 
   </script>
 ```
 
-## TODO
-Click on browser title bar or on browser tab is not detected as an activity 'event'. See Issue #2.
+### Tested in These Browsers
 
+* Mozilla Firefox v22.0
+* Internet Explorer v8
+
+Use jquery-idleTimeout-for-testing.js with Firefox with Firebug add-on or similar for debugging. Thank you for your feedback.
