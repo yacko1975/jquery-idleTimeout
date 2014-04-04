@@ -50,25 +50,25 @@
           var jqjs   = myIframe.contentWindow.document.createElement("script");
           jqjs.type  = "text/javascript";
           jqjs.src   = "//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js";
-          myIframe.contentWindow.document.body.appendChild(jqjs);
+          myIframe.contentWindow.document.head.appendChild(jqjs);
           // jquery ui
           var jquijs   = myIframe.contentWindow.document.createElement("script");
           jquijs.type  = "text/javascript";
           jquijs.src   = "//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js";
-          myIframe.contentWindow.document.body.appendChild(jquijs);
+          myIframe.contentWindow.document.head.appendChild(jquijs);
           // store.js
           var storejs   = myIframe.contentWindow.document.createElement("script");
           storejs.type  = "text/javascript";
           storejs.src   = "https://raw.githubusercontent.com/marcuswestin/store.js/master/store.min.js";
-          myIframe.contentWindow.document.body.appendChild(storejs);
+          myIframe.contentWindow.document.head.appendChild(storejs);
           // idleTimeout.js
           var idleTimeoutjs   = myIframe.contentWindow.document.createElement("script");
           idleTimeoutjs.type  = "text/javascript";
           idleTimeoutjs.src   = "https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/master/jquery-idleTimeout-for-testing.js";
-          myIframe.contentWindow.document.body.appendChild(idleTimeoutjs);
+          myIframe.contentWindow.document.head.appendChild(idleTimeoutjs);
           // call the idleTimer in the iFrame
           var idleTimer = "$(document).ready(function(){$(document).idleTimeout();});";
-          $('#test-iframe').contents().find('body').append($('<script>').html(idleTimer));
+          $('#test-iframe').contents().find('head').append($('<script>').html(idleTimer));
         </script>
 
       </div>
