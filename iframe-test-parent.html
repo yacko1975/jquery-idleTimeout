@@ -44,8 +44,6 @@
         </iframe>
 
         <script type="text/javascript" charset="utf-8">
-          var myIframe = document.getElementById("test-iframe");
-
           // jquery
           var jq = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"><';
           jq += '/script>';
@@ -67,9 +65,9 @@
           $("#testIframe").contents().find("head").append(idleTimeoutjs);
 
           // call the idleTimer in the iFrame
-          var idleTimer = "<script>$(document).ready(function(){$(document).idleTimeout();});<";
-          idleTimer += "/script>";
-          $('#test-iframe').contents().find('head').append(idleTimer);
+          var idleTimer = '<script>$(document).ready(function(){$(document).idleTimeout();});<';
+          idleTimer += '/script>';
+          $("#testIframe").contents().find("head").append(idleTimer);
         </script>
 
       </div>
