@@ -40,35 +40,36 @@
 
         <p>Child iFrame loaded below</p>
 
-        <iframe src="iframe-test-child.html" id="test-iframe" style="border:3px solid #AB4A0E;width:500px;height:300px">
+        <iframe src="iframe-test-child.html" id="testIframe" style="border:3px solid #AB4A0E;width:500px;height:300px">
         </iframe>
 
         <script type="text/javascript" charset="utf-8">
           var myIframe = document.getElementById("test-iframe");
 
           // jquery
-          var jqjs   = myIframe.contentWindow.document.createElement("script");
-          jqjs.type  = "text/javascript";
-          jqjs.src   = "//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js";
-          myIframe.contentWindow.document.head.appendChild(jqjs);
+          var jq = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"><';
+          jq += '/script>';
+          $("#testIframe").contents().find("head").append(jq);
+
           // jquery ui
-          var jquijs   = myIframe.contentWindow.document.createElement("script");
-          jquijs.type  = "text/javascript";
-          jquijs.src   = "//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js";
-          myIframe.contentWindow.document.head.appendChild(jquijs);
+          var jqui = '<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"><';
+          jqui += '/script>';
+          $("#testIframe").contents().find("head").append(jqui);
+
           // store.js
-          var storejs   = myIframe.contentWindow.document.createElement("script");
-          storejs.type  = "text/javascript";
-          storejs.src   = "https://raw.githubusercontent.com/marcuswestin/store.js/master/store.min.js";
-          myIframe.contentWindow.document.head.appendChild(storejs);
+          var storejs = '<script src="https://raw.githubusercontent.com/marcuswestin/store.js/master/store.min.js" type="text/javascript"><';
+          storejs += '/script>';
+          $("#testIframe").contents().find("head").append(storejs);
+
           // idleTimeout.js
-          var idleTimeoutjs   = myIframe.contentWindow.document.createElement("script");
-          idleTimeoutjs.type  = "text/javascript";
-          idleTimeoutjs.src   = "https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/master/jquery-idleTimeout-for-testing.js";
-          myIframe.contentWindow.document.head.appendChild(idleTimeoutjs);
+          var idleTimeoutjs = '<script src="https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/master/jquery-idleTimeout-for-testing.js" type="text/javascript"><';
+          idleTimeoutjs += '/script>';
+          $("#testIframe").contents().find("head").append(idleTimeoutjs);
+
           // call the idleTimer in the iFrame
-          var idleTimer = "$(document).ready(function(){$(document).idleTimeout();});";
-          $('#test-iframe').contents().find('head').append($('<script>').html(idleTimer));
+          var idleTimer = "<script>$(document).ready(function(){$(document).idleTimeout();});<";
+          idleTimer += "/script>";
+          $('#test-iframe').contents().find('head').append(idleTimer);
         </script>
 
       </div>
