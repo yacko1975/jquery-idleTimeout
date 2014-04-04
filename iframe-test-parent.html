@@ -41,12 +41,11 @@
         <p>Child iFrame loaded below</p>
 
         <iframe src="iframe-test-child.html" id="test-iframe" style="border:3px solid #AB4A0E;width:500px;height:300px">
-
         </iframe>
 
         <script type="text/javascript" charset="utf-8">
-          var myscript = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"><' + '/script>';
-          $('#test-iframe').contents().find('head')[0].append(myscript);
+          var myscript = 'alert("hello")';
+          $('#test-iframe').contents().find('body').append($('<script>').html(myscript));
         </script>
 
       </div>
