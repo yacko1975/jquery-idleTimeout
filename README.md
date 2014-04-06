@@ -89,7 +89,7 @@ Use the script with default settings or edit the other configuration variables a
 ```
 
 ## Optional functionality
-If user manually logs out with a click of your site's 'Logout' button and not with use of the idleTimer function, you can force all 'same domain' windows/tabs to redirect to your 'redirectUrl' page by adding a small snippet of javascript to the user's 'redirectUrl' page.
+If user manually logs out with a click of your site's 'Logout' button and not with use of the idleTimer function, you can force all 'same domain' windows/tabs to redirect to your 'redirectUrl' page by adding a small snippet of javascript to the Logout button or to the user's 'redirectUrl' page.
 
 Note: all required scripts must be available on the 'redirectUrl' page for this to work.
 
