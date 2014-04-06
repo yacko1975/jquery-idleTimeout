@@ -94,7 +94,7 @@
 
     // is dialog open function
     var isDialogOpen = function() {
-      var dialogOpen = $('#idletimer_warning_dialog').dialog('isOpen');
+      var dialogOpen = $("#idletimer_warning_dialog").is(":visible");
 
       if (dialogOpen === true) {
         return true;
