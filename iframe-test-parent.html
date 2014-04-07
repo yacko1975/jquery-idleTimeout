@@ -31,7 +31,7 @@
         var iframe = $('iframe').contents().find('html');
         // Bubble events from child iframe to parent page
         iframe.on(eventList, function(event) {
-            $('#child_activity').show(400, $('#child_activity').fadeOut());
+            $('#child_activity').show(20, $('#child_activity').fadeOut());
             $('body').trigger(event);
         });
       };
