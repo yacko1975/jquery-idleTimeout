@@ -52,15 +52,19 @@
 
         <h2>GitHub Project Page - <a href="https://github.com/JillElaine/jquery-idleTimeout">https://github.com/JillElaine/jquery-idleTimeout</a></h2>
 
-        <p>To see functionality, do not press any keys, click your mouse or scroll your mousewheel for 10 seconds.</p>
+        <p>This page demonstrates the 'bubbling' of activity events from the iframe to the main parent page. Events that are detected are clicks, keypresses, and wheel scrolling.</p>
+
+        <p>To see idle timeout functionality, do not press any keys, click your mouse or scroll your mousewheel for 10 seconds.</p>
+
+        <h3>Activity Detector</h3>
+
+        <div id="parent_activity" style="background-color:yellow;border:solid 1px black;width: 50%"><h4>Parent Activity</h4></div>
+
+        <p></p>
+
+        <div id="child_activity" style="background-color: orange;border:solid 1px black;width: 50%"><h4>Child Iframe Activity</h4></div>
 
         <p>Child iFrame loaded below</p>
-
-        <h3>Activity Detected</h3>
-
-        <div id="parent_activity" style="background-color:yellow;border:solid 1px black;width: 50%">Parent Activity</div>
-
-        <div id="child_activity" style="background-color: orange;border:solid 1px black;width: 50%">Child Iframe Activity</div>
 
         <iframe src="iframe-test-child.html" id="testIframe" onload="iframe_onload()" style="border:3px solid #AB4A0E;">
         </iframe>

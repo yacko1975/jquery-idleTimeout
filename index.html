@@ -14,13 +14,21 @@
 		<script src="https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/master/jquery-idleTimeout.js" type="text/javascript"></script>
 
 		<script type="text/javascript" charset="utf-8">
+
+		  var eventList = 'click keypress scroll wheel mousewheel'; // separate each event with a space
+
       $(document).ready(function(){
+
         $(document).idleTimeout({
           idleTimeLimit: 30000,         // 30 seconds
           dialogDisplayLimit: 30000,   // Time to display the warning dialog before redirect (and optional callback) in milliseconds
           redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
-          activityEvents: 'click keypress scroll wheel mousewheel', // separate each event with a space
+          activityEvents: eventList, // separate each event with a space
           sessionKeepAliveTimer: false, // Set to false to disable pings.
+        });
+
+        $('body').on(eventList, function(event) {
+          $('#parent_activity').effect('shake');
         });
       });
 		</script>
@@ -57,6 +65,9 @@
               <li>&lt;script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"&gt;&lt;/script&gt;</li>
             </ul>
         </ul>
+
+        <h3>Activity Detector</h3>
+        <div id="parent_activity" style="background-color:yellow;border:solid 1px black;width: 50%"><h4>Activity!</h4></div>
 
         <h3>Functionality & Features</h3>
         <ul>
