@@ -24,6 +24,10 @@
           activityEvents: eventList, // separate each event with a space
           sessionKeepAliveTimer: false, // Set to false to disable pings.
         });
+
+        $('body').on(eventList, function(event) {
+            $('#parent_activity').effect('shake');
+        });
       });
 
       // this function is called by the 'onload' event of the iframe
@@ -31,7 +35,7 @@
         var iframe = $('iframe').contents().find('html');
         // Bubble events from child iframe to parent page
         iframe.on(eventList, function(event) {
-            $('#child_activity').show(20, $('#child_activity').fadeOut());
+            $('#child_activity').effect('shake');
             $('body').trigger(event);
         });
       };
@@ -54,9 +58,9 @@
 
         <h3>Activity Detected</h3>
 
-        <div id="parent_activity" style="background-color:yellow; display:none">Parent Activity</div>
+        <div id="parent_activity" style="background-color:yellow;border:solid 1px black;width: 50%">Parent Activity</div>
 
-        <div id="child_activity" style="background-color: orange; display:none">Child Iframe Activity</div>
+        <div id="child_activity" style="background-color: orange;border:solid 1px black;width: 50%">Child Iframe Activity</div>
 
         <iframe src="iframe-test-child.html" id="testIframe" onload="iframe_onload()" style="border:3px solid #AB4A0E;">
         </iframe>
