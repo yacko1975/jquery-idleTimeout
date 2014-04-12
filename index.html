@@ -20,7 +20,7 @@
       $(document).ready(function(){
 
         $(document).idleTimeout({
-          idleTimeLimit: 30000,         // 30 seconds
+          idleTimeLimit: 15000,         // 15 seconds
           dialogDisplayLimit: 30000,   // Time to display the warning dialog before redirect (and optional callback) in milliseconds
           redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
           activityEvents: eventList, // separate each event with a space
@@ -28,7 +28,7 @@
         });
 
         $('body').on(eventList, function(event) {
-          $('#parent_activity').effect('shake');
+          $('#activity').effect('shake');
         });
       });
 		</script>
@@ -41,9 +41,10 @@
       </div>
 
       <div class="main_content">
+
         <h2>GitHub Project Page - <a href="https://github.com/JillElaine/jquery-idleTimeout">https://github.com/JillElaine/jquery-idleTimeout</a></h2>
 
-        <p>To see functionality, do not press any keys, click your mouse or scroll your mousewheel for 30 seconds.</p>
+        <p>To see the 'idle timeout' functionality, do not press any keys, click your mouse or scroll your mousewheel for 15 seconds.</p>
 
         <h3>Functions across multiple windows and tabs within the same domain</h3>
 
@@ -67,7 +68,7 @@
         </ul>
 
         <h3>Activity Detector</h3>
-        <div id="parent_activity" style="background-color:yellow;border:solid 1px black;width: 50%"><h4>Activity!</h4></div>
+        <div id="activity" style="background-color:yellow;border:solid 1px black;width: 50%"><h4>Activity Detected!</h4></div>
 
         <h3>Functionality & Features</h3>
         <ul>
