@@ -54,12 +54,12 @@ body {
     padding: 3px 3px 3px 22px;
     width: auto;
 }
-.float_right {
-   float: right;
+.float_left {
+   float: left;
 }
 .logoutall {
-   background: url("logout_green.png") no-repeat scroll 4px 3px #858585;
+   background: url("/logout_green.png") no-repeat scroll 4px 3px #858585;
 }
 .logoutone {
-   background: url("logout_red.png") no-repeat scroll 4px 3px #858585;
+   background: url("/logout_red.png") no-repeat scroll 4px 3px #858585;
 }

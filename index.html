@@ -17,6 +17,19 @@
 
 		  var eventList = 'click keypress scroll wheel mousewheel'; // separate each event with a space
 
+      var voluntaryLogoutAll = function() {
+        if (store.enabled) {
+          store.set('idleTimerLoggedOut', true);
+          voluntaryLogoutOne();
+        } else {
+          alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
+        }
+      }
+
+      var voluntaryLogoutOne = function() {
+        window.location.href = "https://github.com/JillElaine/jquery-idleTimeout";
+      }
+
       $(document).ready(function(){
 
         $(document).idleTimeout({
@@ -30,19 +43,6 @@
         $('body').on(eventList, function(event) {
           $('#activity').effect('shake');
         });
-
-        var voluntaryLogoutAll = function() {
-          if (store.enabled) {
-            store.set('idleTimerLoggedOut', true);
-            voluntaryLogoutOne();
-          } else {
-            alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
-          }
-        }
-
-        var voluntaryLogoutOne = function() {
-          window.location.href = "https://github.com/JillElaine/jquery-idleTimeout";
-        }
       });
 		</script>
 	</head>
@@ -104,10 +104,10 @@
 
         <div>
           <input type="button" value="Logout All Windows/Tabs" onclick="voluntaryLogoutAll()" title="This button will logout ALL 'same domain' Windows/Tabs"
-            class="button logoutall float_right" id="logoutAll">
+            class="button logoutall float_left" id="logoutAll">
           &nbsp;&nbsp;&nbsp;&nbsp;
           <input type="button" value="Logout Only This Window/Tab" onclick="voluntaryLogoutOne()" title="This button will logout only the current Window/Tab"
-            class="button logoutone float_right" id="logoutOne">
+            class="button logoutone float_left" id="logoutOne">
         </div>
 
         <p>If user voluntarily logs out of your site with your 'Logout' button (instead of timing out),
