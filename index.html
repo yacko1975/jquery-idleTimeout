@@ -11,7 +11,7 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
 		<script src="https://raw.githubusercontent.com/marcuswestin/store.js/master/store.min.js" type="text/javascript"></script>
-		<script src="https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/master/jquery-idleTimeout.js" type="text/javascript"></script>
+		<script src="https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/master/jquery-idleTimeout.min.js" type="text/javascript"></script>
 
 		<script type="text/javascript" charset="utf-8">
 
@@ -30,6 +30,19 @@
         $('body').on(eventList, function(event) {
           $('#activity').effect('shake');
         });
+
+        var voluntaryLogoutAll = function() {
+          if (store.enabled) {
+            store.set('idleTimerLoggedOut', true);
+            voluntaryLogoutOne();
+          } else {
+            alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
+          }
+        }
+
+        var voluntaryLogoutOne = function() {
+          window.location.href = "https://github.com/JillElaine/jquery-idleTimeout";
+        }
       });
 		</script>
 	</head>
@@ -87,19 +100,31 @@
           <li>If neither button on the warning dialog box is clicked within the 'dialogDisplayLimit', all 'same domain' windows/tabs will redirect to the 'redirectUrl'.</li>
         </ul>
 
-        <h3>Optional Functionality</h3>
+        <h3>Voluntary Logout - Optional Functionality</h3>
 
-        <p>If user manually logs out with a click of your site's 'Logout' button and not with use of the idleTimer function,
-        you can force all 'same domain' windows/tabs to redirect to your 'redirectUrl' page by
-        adding a small snippet of javascript to the user's 'redirectUrl' page.
-        Note: <strong>all required scripts</strong> must be available on the 'redirectUrl' page for this to work.</p>
+        <div>
+          <input type="button" value="Logout All Windows/Tabs" onclick="voluntaryLogoutAll()" title="This button will logout ALL 'same domain' Windows/Tabs"
+            class="button logoutall float_right" id="logoutAll">
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="button" value="Logout Only This Window/Tab" onclick="voluntaryLogoutOne()" title="This button will logout only the current Window/Tab"
+            class="button logoutone float_right" id="logoutOne">
+        </div>
 
-        <p><strong>Optional 'Manual Logout' Script</strong></p>
+        <p>If user voluntarily logs out of your site with your 'Logout' button (instead of timing out),
+        you can force all 'same domain' windows/tabs to also log out too!
+        Add a small snippet of javascript to the 'onclick' function of your 'Logout' button.</p>
+
+        <h4><a href="http://jillelaine.github.io/jquery-idleTimeout/index.html" target="_blank">
+          Try it! Click here to open another browser window/tab of this page and then try the two 'Logout' buttons above.
+        </a></h4>
+
+        <p><strong>Optional 'Voluntary Logout' Script</strong></p>
         <p>
           &lt;script type="text/javascript"&gt;
             <br />&nbsp;&nbsp;$(document).ready(function(){
               <br />&nbsp;&nbsp;&nbsp;&nbsp;if (store.enabled) {
                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;store.set('idleTimerLoggedOut', true);
+                <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window.location.href = "https://github.com/JillElaine/jquery-idleTimeout";
               <br />&nbsp;&nbsp;&nbsp;&nbsp;} else {
                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
               <br />&nbsp;&nbsp;&nbsp;&nbsp;}
@@ -109,7 +134,7 @@
 
         <h3>The Demo Runtime Configuration</h3>
         <ul>
-          <li>The idle time limit, 'idleTimeLimit', is set to 30 seconds (30000 milliseconds).</li>
+          <li>The idle time limit, 'idleTimeLimit', is set to 15 seconds (15000 milliseconds).</li>
           <li>Activity events to detect, 'activityEvents', are set to 'click keypress scroll wheel mousewheel'.</li>
           <li>The warning dialog display limit, 'dialogDisplayLimit', is set to 30 seconds.</li>
           <li>The redirect page, 'redirectUrl', is set to https://github.com/JillElaine/jquery-idleTimeout.</li>
@@ -121,7 +146,7 @@
           &lt;script type="text/javascript" charset="utf-8"&gt;
           <br />&nbsp;&nbsp;$(document).ready(function(){
             <br />&nbsp;&nbsp;&nbsp;&nbsp;$(document).idleTimeout({
-              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idleTimeLimit: 30000,         // 30 seconds
+              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idleTimeLimit: 15000,         // 15 seconds
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dialogDisplayLimit: 30000,   // Time to display the warning dialog before redirect (and optional callback) in milliseconds. 30000 = 30 seconds, 180000 = 3 Minutes
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;activityEvents: 'click keypress scroll wheel mousewheel', // separate each event with a space
