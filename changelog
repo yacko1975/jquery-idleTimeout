@@ -1,5 +1,8 @@
 Changelog - JillElaine/jquery-idleTimeout.js
 --------------------------------------------
+v1.0.6
++ Add ability to detect activity within iframes within the same domain. Closes issue #5.
++ Upgrade all code to JSLint compliant
 
 v1.0.5
 + Add 'Time remaining' countdown to warning dialog
