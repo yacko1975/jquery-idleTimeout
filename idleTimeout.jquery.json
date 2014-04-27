@@ -1,6 +1,6 @@
 {
   "name": "idleTimeout",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "title": "JQuery IdleTimeout for Multiple Windows",
   "author": {
     "name": "Jill Elaine",
@@ -23,8 +23,8 @@
     "jquery-ui": "1.9",
     "https://github.com/marcuswestin/store.js": "1.3.4+"
   },
-  "description": "Configurable idle (no activity) timer and logout redirect for jQuery. Works across multiple windows and tabs within the same domain.",
-  "keywords": ["idle", "timer", "inactivity-detector", "logout-redirect", "cross-browser", "multiple-windows-tabs"],
+  "description": "Configurable idle (no activity) timer and logout redirect for jQuery. Works across multiple windows, tabs, and iframes within the same domain.",
+  "keywords": ["idle", "timer", "inactivity-detector", "logout-redirect", "multiple-windows-tabs-iframes"],
   "homepage": "https://github.com/JillElaine/jquery-idleTimeout",
   "docs": "https://github.com/JillElaine/jquery-idleTimeout/blob/master/README.md",
   "demo": "http://jillelaine.github.io/jquery-idleTimeout/index.html",
