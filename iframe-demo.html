@@ -14,20 +14,22 @@
 		<script src="https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/master/jquery-idleTimeout-iframes.min.js" type="text/javascript"></script>
 
 		<script type="text/javascript" charset="utf-8">
+      /*global $: false, jQuery: false, document: false, store: false*/
+      /*jslint indent: 2, sloppy: true*/
 
-		  var eventList = 'click keypress scroll wheel mousewheel'; // separate each event with a space
+      var eventList = 'click keypress scroll wheel mousewheel'; // separate each event with a space
 
-      $(document).ready(function (){
+      $(document).ready(function () {
 
         $(document).idleTimeout({
           idleTimeLimit: 15000,         // 15 seconds
-          dialogDisplayLimit: 30000,   // Time to display the warning dialog before redirect (and optional callback) in milliseconds
+          dialogDisplayLimit: 30000,    // Time to display the warning dialog before redirect (and optional callback) in milliseconds
           redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
-          activityEvents: eventList, // separate each event with a space
-          sessionKeepAliveTimer: false, // Set to false to disable pings.
+          activityEvents: eventList,   // separate each event with a space
+          sessionKeepAliveTimer: false // Set to false to disable pings.
         });
 
-        $('body').on(eventList, function(event) {
+        $('body').on(eventList, function () {
           $('#activity').effect('shake');
         });
       });
@@ -43,11 +45,8 @@
 	    <div class="main_content">
 
         <h2>GitHub Project Page - <a href="https://github.com/JillElaine/jquery-idleTimeout">https://github.com/JillElaine/jquery-idleTimeout</a></h2>
-
         <p>This page demonstrates the 'bubbling' of activity events from an iframe <strong><i>within the same domain</i></strong> to the parent page.</p>
-
         <p>Activity events that are detected are clicks, keypresses, and wheel scrolling.</p>
-
         <p>To see the 'idle timeout' functionality, do not press any keys, click your mouse or scroll your mousewheel for 15 seconds.</p>
 
         <h3>Functions across multiple windows, tabs <strong>AND IFRAMES</strong> within the same domain</h3>
@@ -55,13 +54,10 @@
         <h4><a href="http://jillelaine.github.io/jquery-idleTimeout/iframe-demo.html" target="_blank">Try it! Click here to open another browser window/tab of this page.</a></h4>
 
         <h3>Activity Detector</h3>
-
-        <div id="activity" style="background-color:yellow;border:solid 1px black;padding:25px;width: 50%"><h4>Activity!!</h4></div>
+        <div id="activity" class="activity_detected"><h4>Activity Detected!</h4></div>
 
         <h3>Iframes</h3>
-
         <p>Activity within the first iframe is detected because the 'child' page within the ifram is from the <strong><i>same domain</i></strong>.</p>
-
         <p>Activity within the second iframe is <strong>NOT</strong> detected because the 'child' page within the iframe is from a <strong><i>different domain</i></strong>, w3schools.com.</p>
 
         <iframe src="iframe-demo-child.html" style="border:3px solid #AB4A0E;height: 400px;">

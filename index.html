@@ -10,37 +10,39 @@
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
-		<script src="https://raw.githubusercontent.com/marcuswestin/store.js/master/store.min.js" type="text/javascript"></script>
+		<script src="javascripts/store.min.js" type="text/javascript"></script>
 		<script src="https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/master/jquery-idleTimeout.min.js" type="text/javascript"></script>
 
 		<script type="text/javascript" charset="utf-8">
+      /*global $: false, jQuery: false, document: false, store: false, window: false, alert: false*/
+      /*jslint indent: 2, sloppy: true*/
 
-		  var eventList = 'click keypress scroll wheel mousewheel'; // separate each event with a space
+      var eventList = 'click keypress scroll wheel mousewheel'; // separate each event with a space
 
-      var voluntaryLogoutAll = function() {
+      var voluntaryLogoutOne = function () {
+        window.location.href = "https://github.com/JillElaine/jquery-idleTimeout";
+      };
+
+      var voluntaryLogoutAll = function () {
         if (store.enabled) {
           store.set('idleTimerLoggedOut', true);
           voluntaryLogoutOne();
         } else {
-          alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
+          alert('Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js');
         }
-      }
+      };
 
-      var voluntaryLogoutOne = function() {
-        window.location.href = "https://github.com/JillElaine/jquery-idleTimeout";
-      }
-
-      $(document).ready(function(){
+      $(document).ready(function () {
 
         $(document).idleTimeout({
           idleTimeLimit: 15000,         // 15 seconds
-          dialogDisplayLimit: 30000,   // Time to display the warning dialog before redirect (and optional callback) in milliseconds
+          dialogDisplayLimit: 30000,    // Time to display the warning dialog before redirect (and optional callback) in milliseconds
           redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
-          activityEvents: eventList, // separate each event with a space
-          sessionKeepAliveTimer: false, // Set to false to disable pings.
+          activityEvents: eventList,    // separate each event with a space
+          sessionKeepAliveTimer: false  // Set to false to disable pings.
         });
 
-        $('body').on(eventList, function(event) {
+        $('body').on(eventList, function () {
           $('#activity').effect('shake');
         });
       });
@@ -81,7 +83,7 @@
         </ul>
 
         <h3>Activity Detector</h3>
-        <div id="activity" style="background-color:yellow;border:solid 1px black;width: 50%"><h4>Activity Detected!</h4></div>
+        <div id="activity" class="activity_detected"><h4>Activity Detected!</h4></div>
 
         <h3>Functionality & Features</h3>
         <ul>
@@ -121,12 +123,12 @@
         <p><strong>Optional 'Voluntary Logout' Script</strong></p>
         <p>
           &lt;script type="text/javascript"&gt;
-            <br />&nbsp;&nbsp;$(document).ready(function(){
+            <br />&nbsp;&nbsp;$(document).ready(function () {
               <br />&nbsp;&nbsp;&nbsp;&nbsp;if (store.enabled) {
                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;store.set('idleTimerLoggedOut', true);
                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window.location.href = "https://github.com/JillElaine/jquery-idleTimeout";
               <br />&nbsp;&nbsp;&nbsp;&nbsp;} else {
-                <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('Dependent file missing. Please see: https://github.com/marcuswestin/store.js');
+                <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js');
               <br />&nbsp;&nbsp;&nbsp;&nbsp;}
             <br />&nbsp;&nbsp;});
           <br />&lt;/script&gt;
@@ -144,13 +146,13 @@
         <h3>The Demo Runtime Configuration Script</h3>
         <p>
           &lt;script type="text/javascript" charset="utf-8"&gt;
-          <br />&nbsp;&nbsp;$(document).ready(function(){
+          <br />&nbsp;&nbsp;$(document).ready(function () {
             <br />&nbsp;&nbsp;&nbsp;&nbsp;$(document).idleTimeout({
-              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idleTimeLimit: 15000,         // 15 seconds
+              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idleTimeLimit: 15000,        // 15 seconds
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dialogDisplayLimit: 30000,   // Time to display the warning dialog before redirect (and optional callback) in milliseconds. 30000 = 30 seconds, 180000 = 3 Minutes
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;activityEvents: 'click keypress scroll wheel mousewheel', // separate each event with a space
-              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sessionKeepAliveTimer: false, // Set to false to disable pings.
+              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sessionKeepAliveTimer: false // Set to false to disable pings.
             <br />&nbsp;&nbsp;&nbsp;&nbsp;});
           <br />&nbsp;&nbsp;});
         <br />&lt;/script&gt;
