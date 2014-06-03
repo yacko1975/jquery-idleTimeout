@@ -56,7 +56,7 @@ Use the script with default settings, configure the options when you call the id
 ### Run with Defaults
 
 ```Javascript
-  $(document).ready(function (){
+  $(document).ready(function () {
     $(document).idleTimeout({
       redirectUrl:  '/logout' // redirect to this url. Set this value to YOUR site's logout page.
     });
@@ -66,7 +66,7 @@ Use the script with default settings, configure the options when you call the id
 ### Configuration May be Overridden at Run-Time
 
 ```Javascript
-  $(document).ready(function (){
+  $(document).ready(function () {
     $(document).idleTimeout({
       idleTimeLimit:      1200000,           // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
       dialogDisplayLimit: 180000,            // Time to display the warning dialog before redirect (and optional callback) in milliseconds. 180000 = 3 Minutes
