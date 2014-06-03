@@ -33,6 +33,7 @@ Custom logout (session close) functions may be added to your 'redirectUrl' page 
 * If **'Stay Logged In'** button on **warning dialog** is clicked, warning dialogs on all other windows and tabs will be dismissed too.
 * If **'Log Out Now'** button on **warning dialog** is clicked, all other windows and tabs will log out too.
 * Optional script to add to your site's **Logout** button
+* Pings server every 10 minutes (default) to prevent server-side session timeout
 
 ### Dependencies
 
@@ -86,10 +87,9 @@ Use the script with default settings, configure the options when you call the id
       dialogTitle:          'Session Expiration Warning',
       dialogText:           'Because you have been inactive, your session is about to expire.',
 
-      // server-side session keep-alive timer & url
-      sessionKeepAliveTimer: 60000,          // Ping the server at this interval in milliseconds. 60000 = 1 Minute
-      // sessionKeepAliveTimer: false,       // Set to false to disable pings.
-      sessionKeepAliveUrl:   '/'             // url to ping
+      // server-side session keep-alive timer
+      sessionKeepAliveTimer: 600000          // Ping the server at this interval in milliseconds. 600000 = 10 Minutes
+      // sessionKeepAliveTimer: false        // Set to false to disable pings.
     });
   });
 ```

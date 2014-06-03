@@ -23,7 +23,7 @@
     var defaults = {
       idleTimeLimit: 30000,         // 30 seconds for testing. 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
       dialogDisplayLimit: 20000,    // 20 seconds for testing. Time to display the warning dialog before redirect (and optional callback) in milliseconds. 180000 = 3 Minutes
-      redirectUrl: '/logout',       // redirect to this url. Set this value to YOUR site's logout page.
+      redirectUrl: '/logout',       // redirect to this url on timeout logout. Set to "redirectUrl: false" to disable redirect
 
       // optional custom callback to perform before redirect
       customCallback: false,       // set to false for no customCallback
@@ -40,10 +40,9 @@
       dialogTitle: 'Session Expiration Warning',
       dialogText: 'Because you have been inactive, your session is about to expire.',
 
-      // server-side session keep-alive timer & url
-      sessionKeepAliveTimer: 60000, // Ping the server at this interval in milliseconds. 60000 = 1 Minute
-      // sessionKeepAliveTimer: false, // Set to false to disable pings
-      sessionKeepAliveUrl: '/'  // url to ping
+      // server-side session keep-alive timer
+      sessionKeepAliveTimer: 600000 // Ping the server at this interval in milliseconds. 600000 = 10 Minutes
+      // sessionKeepAliveTimer: false // Set to false to disable pings
     },
 
     //##############################
@@ -52,6 +51,7 @@
       opts = $.extend(defaults, options),
       checkHeartbeat = 2000, // frequency to check for timeouts - 2000 = 2 seconds
       origTitle = document.title, // save original browser title
+      sessionKeepAliveUrl = window.location.href, // set URL to ping to user's current window
       keepSessionAlive, activityDetector,
       idleTimer, remainingTimer, checkIdleTimeout, idleTimerLastActivity, startIdleTimer, stopIdleTimer,
       openWarningDialog, dialogTimer, checkDialogTimeout, startDialogTimer, stopDialogTimer, isDialogOpen, destroyWarningDialog,
@@ -67,7 +67,7 @@
         var keepSession = function () {
           if (idleTimerLastActivity === store.get('idleTimerLastActivity')) {
             console.log('keep session alive function');
-            $.get(opts.sessionKeepAliveUrl);
+            $.get(sessionKeepAliveUrl);
           }
         };
 
@@ -207,11 +207,12 @@
       store.set('idleTimerLoggedOut', true);
 
       if (opts.customCallback) {
-        console.log('custom callback');
+        console.log('logout function custom callback');
         opts.customCallback();
       }
 
       if (opts.redirectUrl) {
+        console.log('logout function redirect to URL');
         window.location.href = opts.redirectUrl;
       }
     };

@@ -1,11 +1,12 @@
 Changelog - JillElaine/jquery-idleTimeout.js
 --------------------------------------------
 v1.0.6
++ Modify sessionKeepAliveTimer default to 10 minutes. Set user's current URL as URL to ping. Closes issue #7.
 + Add ability to detect activity within iframes within the same domain. Closes issue #5.
 + Upgrade all code to JSLint compliant
 
 v1.0.5
-+ Add 'Time remaining' countdown to warning dialog
++ Add 'Time remaining' countdown to warning dialog. Closes issue #6.
 + Change to MIT License
 + Fix bug in 'isDialogOpen' test
 
@@ -27,13 +28,9 @@ v1.0.1
 
 v1.0
 + First versioned version
-+ Add support for disable of server pings - fix issue #1
-+ Move 'event listener' to all windows & tabs, not just 'inactive' ones - fix issue #3
-+ Separate 'storage event change' reaction function from 'start dialog timer' function
++ Add support for disable of server pings. Closes issue #1.
++ Move 'event listener' to all windows & tabs, not just 'inactive' ones. Closes issue #3.
 + Modify custom callback support - does not override redirect url
 + Add support to disable redirect url
-+ Rename 'perform_redirect' logout function to 'perform_logout_procedure'
 + Create 'destroy & remove warning dialog' as separate function
 + Add testing version - jquery-idleTimeout-for-testing.js
-
-
