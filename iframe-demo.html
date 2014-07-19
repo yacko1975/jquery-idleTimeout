@@ -22,11 +22,11 @@
       $(document).ready(function () {
 
         $(document).idleTimeout({
-          idleTimeLimit: 15000,         // 15 seconds
-          dialogDisplayLimit: 30000,    // Time to display the warning dialog before redirect (and optional callback) in milliseconds
+          idleTimeLimit: 15,            // 15 seconds 'No activity' time limit in seconds.
           redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
-          activityEvents: eventList,   // separate each event with a space
-          sessionKeepAliveTimer: false // Set to false to disable pings.
+          activityEvents: eventList,    // separate each event with a space
+          dialogDisplayLimit: 30,       // Time to display the warning dialog before logout (and optional callback) in seconds
+          sessionKeepAliveTimer: false  // Set to false to disable pings.
         });
 
         $('body').on(eventList, function () {

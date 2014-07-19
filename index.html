@@ -35,10 +35,10 @@
       $(document).ready(function () {
 
         $(document).idleTimeout({
-          idleTimeLimit: 15000,         // 15 seconds
-          dialogDisplayLimit: 30000,    // Time to display the warning dialog before redirect (and optional callback) in milliseconds
+          idleTimeLimit: 15,            // 15 seconds 'No activity' time limit in seconds.
           redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
           activityEvents: eventList,    // separate each event with a space
+          dialogDisplayLimit: 30,       // Time to display the warning dialog before logout (and optional callback) in seconds
           sessionKeepAliveTimer: false  // Set to false to disable pings.
         });
 
@@ -67,7 +67,7 @@
 
         <ul>
           <li>If a window/tab is logged out, all other windows/tabs will log out too.</li>
-          <li>If warning dialog appears on one window/tab, a warning dialog appears on all other 'same domain' windows/tabs too.</li>
+          <li>If the warning dialog box is not disabled, if warning dialog appears on one window/tab, warning dialog appears on all other 'same domain' windows/tabs too.</li>
           <li>If 'Stay Logged In' button on warning dialog is clicked, warning dialogs on all 'same domain' windows/tabs will be dismissed too.</li>
           <li>If 'Log Out Now' button on warning dialog is clicked, all 'same domain' windows/tabs will log out too.</li>
         </ul>
@@ -91,15 +91,24 @@
             <ul>
               <li>Uses localStorage, globalStorage and userData behavior to 'communicate' across multiple browser windows/tabs without cookies or flash!</li>
             </ul>
-          <li>If no activity events are detected on any 'same domain' windows/tabs within the 'idleTimeLimit', the warning dialog will appear will appear on all 'same domain' windows/tabs.</li>
+          <li>If the warning dialog is not disabled:</li>
             <ul>
-              <li>Activity events to detect are configurable: clicks, keypresses, scrolls, and/or mouse movements are options.</li>
-              <li><a href="http://www.quirksmode.org/dom/events/" target="_blank">http://www.quirksmode.org/dom/events/</a></li>
-              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference/Events" target="_blank">https://developer.mozilla.org/en-US/docs/Web/Reference/Events</a></li>
+              <li>If no activity events are detected on any 'same domain' windows/tabs within the 'idleTimeLimit', warning dialog will appear will appear on all 'same domain' windows/tabs.</li>
+              <li>If the warning dialog is not disabled, the browser title changes on all 'same domain' windows/tabs when the warning dialog appears, and reverts back to the original title(s) if the warning dialog is dismissed.</li>
+              <li>Warning dialog box includes 'time remaining to logout' countdown timer</li>
+              <li>If neither button on the warning dialog box is clicked within the 'dialogDisplayLimit', all 'same domain' windows/tabs will logout.</li>
             </ul>
-          <li><strong>The browser title changes on all 'same domain' windows/tabs when the warning dialog appears, and reverts back to the original title(s) if the warning dialog is dismissed.</strong></li>
-          <li>Includes 'time remaining to logout' countdown timer on warning dialog</li>
-          <li>If neither button on the warning dialog box is clicked within the 'dialogDisplayLimit', all 'same domain' windows/tabs will redirect to the 'redirectUrl'.</li>
+          <li>If the warning dialog is disabled:</li>
+            <ul>
+              <li>If no activity events are detected on any 'same domain' windows/tabs within the 'idleTimeLimit', all 'same domain' windows/tabs will logout.</li>
+              <li>User will receive no warning before logout</li>
+            </ul>
+        </ul>
+
+        <ul>
+          <li><strong>Activity events to detect are configurable: clicks, keypresses, scrolls, and/or mouse movements are options.</strong></li>
+          <li><a href="http://www.quirksmode.org/dom/events/" target="_blank">http://www.quirksmode.org/dom/events/</a></li>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference/Events" target="_blank">https://developer.mozilla.org/en-US/docs/Web/Reference/Events</a></li>
         </ul>
 
         <h3>Voluntary Logout - Optional Functionality</h3>
@@ -136,7 +145,7 @@
 
         <h3>The Demo Runtime Configuration</h3>
         <ul>
-          <li>The idle time limit, 'idleTimeLimit', is set to 15 seconds (15000 milliseconds).</li>
+          <li>The idle time limit, 'idleTimeLimit', is set to 15 seconds.</li>
           <li>Activity events to detect, 'activityEvents', are set to 'click keypress scroll wheel mousewheel'.</li>
           <li>The warning dialog display limit, 'dialogDisplayLimit', is set to 30 seconds.</li>
           <li>The redirect page, 'redirectUrl', is set to https://github.com/JillElaine/jquery-idleTimeout.</li>
@@ -148,10 +157,10 @@
           &lt;script type="text/javascript" charset="utf-8"&gt;
           <br />&nbsp;&nbsp;$(document).ready(function () {
             <br />&nbsp;&nbsp;&nbsp;&nbsp;$(document).idleTimeout({
-              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idleTimeLimit: 15000,        // 15 seconds
-              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dialogDisplayLimit: 30000,   // Time to display the warning dialog before redirect (and optional callback) in milliseconds. 30000 = 30 seconds, 180000 = 3 Minutes
+              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idleTimeLimit: 15,        // 15 seconds
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;activityEvents: 'click keypress scroll wheel mousewheel', // separate each event with a space
+              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dialogDisplayLimit: 30,   // Time to display the warning dialog before logout (and optional callback) in seconds
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sessionKeepAliveTimer: false // Set to false to disable pings.
             <br />&nbsp;&nbsp;&nbsp;&nbsp;});
           <br />&nbsp;&nbsp;});
