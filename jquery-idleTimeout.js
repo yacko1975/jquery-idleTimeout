@@ -5,7 +5,7 @@
  * Works across multiple windows and tabs from the same domain.
  *
  * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
- * version 1.0.6
+ * version 1.0.7
  **/
 
 /*global jQuery: false, document: false, store: false, clearInterval: false, setInterval: false, setTimeout: false, window: false, alert: false*/
@@ -19,13 +19,13 @@
     //## Configuration Variables
     //##############################
     var defaults = {
-      idleTimeLimit: 1200000,       // 'No activity' time limit in milliseconds. 1200000 = 20 Minutes
-      dialogDisplayLimit: 180000,   // Time to display the warning dialog before redirect (and optional callback) in milliseconds. 180000 = 3 Minutes
-      redirectUrl: '/logout',       // redirect to this url on timeout logout. Set to "redirectUrl: false" to disable redirect
-      // optional custom callback to perform before redirect
-      customCallback: false,       // set to false for no customCallback
+      idleTimeLimit: 1200,       // 'No activity' time limit in seconds. 1200 = 20 Minutes
+      redirectUrl: '/logout',    // redirect to this url on timeout logout. Set to "redirectUrl: false" to disable redirect
+
+      // optional custom callback to perform before logout
+      customCallback: false,     // set to false for no customCallback
       // customCallback:    function () {    // define optional custom js function
-          // perform custom action before logout redirect
+          // perform custom action before logout
       // },
 
       // configure which activity events to detect
@@ -33,12 +33,14 @@
       // https://developer.mozilla.org/en-US/docs/Web/Reference/Events
       activityEvents: 'click keypress scroll wheel mousewheel mousemove', // separate each event with a space
 
-      //dialog box configuration
+      // warning dialog box configuration
+      enableDialog: true,        // set to false for logout without warning dialog
+      dialogDisplayLimit: 180,   // time to display the warning dialog before logout (and optional callback) in seconds. 180 = 3 Minutes
       dialogTitle: 'Session Expiration Warning',
       dialogText: 'Because you have been inactive, your session is about to expire.',
 
       // server-side session keep-alive timer
-      sessionKeepAliveTimer: 600000 // Ping the server at this interval in milliseconds. 600000 = 10 Minutes
+      sessionKeepAliveTimer: 600 // Ping the server at this interval in seconds. 600 = 10 Minutes
       // sessionKeepAliveTimer: false // Set to false to disable pings
     },
 
@@ -46,7 +48,7 @@
     //## Private Variables
     //##############################
       opts = $.extend(defaults, options),
-      checkHeartbeat = 2000, // frequency to check for timeouts - 2000 = 2 seconds
+      checkHeartbeat = 2, // frequency to check for timeouts in seconds
       origTitle = document.title, // save original browser title
       sessionKeepAliveUrl = window.location.href, // set URL to ping to user's current window
       keepSessionAlive, activityDetector,
@@ -61,12 +63,13 @@
 
       if (opts.sessionKeepAliveTimer) {
         var keepSession = function () {
+
           if (idleTimerLastActivity === store.get('idleTimerLastActivity')) {
             $.get(sessionKeepAliveUrl);
           }
         };
 
-        setInterval(keepSession, opts.sessionKeepAliveTimer);
+        setInterval(keepSession, (opts.sessionKeepAliveTimer * 1000));
       }
     };
 
@@ -74,17 +77,20 @@
 
       $('body').on(opts.activityEvents, function () {
 
-        if (isDialogOpen() !== true) {
+        if (!opts.enableDialog || (opts.enableDialog && isDialogOpen() !== true)) {
           startIdleTimer();
         }
       });
     };
 
     checkIdleTimeout = function () {
-      var timeNow = $.now(), timeIdleTimeout = (store.get('idleTimerLastActivity') + opts.idleTimeLimit);
+      var timeNow = $.now(), timeIdleTimeout = (store.get('idleTimerLastActivity') + (opts.idleTimeLimit * 1000));
 
       if (timeNow > timeIdleTimeout) {
-        if (isDialogOpen() !== true) {
+
+        if (!opts.enableDialog) {
+          logoutUser();
+        } else if (opts.enableDialog && isDialogOpen() !== true) {
           openWarningDialog();
           startDialogTimer();
         }
@@ -102,7 +108,7 @@
       stopIdleTimer();
       idleTimerLastActivity = $.now();
       store.set('idleTimerLastActivity', idleTimerLastActivity);
-      idleTimer = setInterval(checkIdleTimeout, checkHeartbeat);
+      idleTimer = setInterval(checkIdleTimeout, (checkHeartbeat * 1000));
     };
 
     stopIdleTimer = function () {
@@ -138,7 +144,7 @@
     };
 
     checkDialogTimeout = function () {
-      var timeNow = $.now(), timeDialogTimeout = (store.get('idleTimerLastActivity') + opts.idleTimeLimit + opts.dialogDisplayLimit);
+      var timeNow = $.now(), timeDialogTimeout = (store.get('idleTimerLastActivity') + (opts.idleTimeLimit * 1000) + (opts.dialogDisplayLimit * 1000));
 
       if ((timeNow > timeDialogTimeout) || (store.get('idleTimerLoggedOut') === true)) {
         logoutUser();
@@ -146,7 +152,7 @@
     };
 
     startDialogTimer = function () {
-      dialogTimer = setInterval(checkDialogTimeout, checkHeartbeat);
+      dialogTimer = setInterval(checkDialogTimeout, (checkHeartbeat * 1000));
     };
 
     stopDialogTimer = function () {
@@ -170,7 +176,7 @@
 
     // display remaining time on warning dialog
     countdownDisplay = function () {
-      var dialogDisplaySeconds = opts.dialogDisplayLimit / 1000, mins, secs;
+      var dialogDisplaySeconds = opts.dialogDisplayLimit, mins, secs;
 
       remainingTimer = setInterval(function () {
         mins = Math.floor(dialogDisplaySeconds / 60); // minutes

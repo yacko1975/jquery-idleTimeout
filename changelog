@@ -1,5 +1,9 @@
 Changelog - JillElaine/jquery-idleTimeout.js
 --------------------------------------------
+v.1.0.7
++ Add ability to disable warning dialog. Closes issue #8.
++ Change configurable timers' units from milliseconds to seconds
+
 v1.0.6
 + Modify sessionKeepAliveTimer default to 10 minutes. Set user's current URL as URL to ping. Closes issue #7.
 + Add ability to detect activity within iframes within the same domain. Closes issue #5.
