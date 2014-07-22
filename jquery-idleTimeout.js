@@ -5,7 +5,7 @@
  * Works across multiple windows and tabs from the same domain.
  *
  * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
- * version 1.0.7
+ * version 1.0.7.1
  **/
 
 /*global jQuery: false, document: false, store: false, clearInterval: false, setInterval: false, setTimeout: false, window: false, alert: false*/
