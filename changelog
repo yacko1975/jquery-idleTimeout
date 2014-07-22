@@ -1,6 +1,6 @@
 Changelog - JillElaine/jquery-idleTimeout.js
 --------------------------------------------
-v.1.0.7
+v.1.0.8
 + Add ability to disable warning dialog. Closes issue #8.
 + Change configurable timers' units from milliseconds to seconds
 
