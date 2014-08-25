@@ -170,7 +170,7 @@
     };
 
     destroyWarningDialog = function () {
-      $(".ui-dialog-content").dialog('destroy').remove();
+      $("#idletimer_warning_dialog").dialog('destroy').remove();
       document.title = origTitle;
     };
 
