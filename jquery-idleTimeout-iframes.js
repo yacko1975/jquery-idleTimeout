@@ -38,6 +38,12 @@
       dialogDisplayLimit: 180,   // time to display the warning dialog before logout (and optional callback) in seconds. 180 = 3 Minutes
       dialogTitle: 'Session Expiration Warning',
       dialogText: 'Because you have been inactive, your session is about to expire.',
+      dialogTimeRemaining: 'Time remaining',
+      dialogStayLoggedInButton: 'Stay Logged In',
+      dialogLogOutNowButton: 'Log Out Now',
+
+      // error message
+      errorAlertMessage: 'Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js',
 
       // server-side session keep-alive timer
       sessionKeepAliveTimer: 600 // Ping the server at this interval in seconds. 600 = 10 Minutes
@@ -116,26 +122,32 @@
     };
 
     openWarningDialog = function () {
-      var dialogContent = "<div id='idletimer_warning_dialog'><p>" + opts.dialogText + "</p><p style='display:inline'>Time remaining: <div style='display:inline' id='countdownDisplay'></div></p></div>";
+      var dialogContent = "<div id='idletimer_warning_dialog'><p>" + opts.dialogText + "</p><p style='display:inline'>" + opts.dialogTimeRemaining + ": <div style='display:inline' id='countdownDisplay'></div></p></div>";
 
       $(dialogContent).dialog({
-        buttons: {
-          "Stay Logged In": function () {
+        buttons: [{
+          text: opts.dialogStayLoggedInButton,
+          click: function () {
             destroyWarningDialog();
             stopDialogTimer();
             startIdleTimer();
-          },
-          "Log Out Now": function () {
-            logoutUser();
           }
         },
+          {
+            text: opts.dialogLogOutNowButton,
+            click: function () {
+              logoutUser();
+            }
+          }
+          ],
         closeOnEscape: false,
         modal: true,
-        title: opts.dialogTitle
+        title: opts.dialogTitle,
+        open: function () {
+          //hide the dialog's upper right corner "x" close button
+          $(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
+        }
       });
-
-      // hide the dialog's upper right corner "x" close button
-      $('.ui-dialog-titlebar-close').css('display', 'none');
 
       // start the countdown display
       countdownDisplay();
@@ -259,7 +271,7 @@
         store.set('idleTimerLastActivity', idleTimerLastActivity);
         store.set('idleTimerLoggedOut', false);
       } else {
-        alert('Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js');
+        alert(opts.errorAlertMessage);
       }
 
       activityDetector();

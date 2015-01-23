@@ -4,6 +4,9 @@ v.1.0.8
 + Add ability to disable warning dialog. Closes issue #8.
 + Change configurable timers' units from milliseconds to seconds
 + Merge pull request #9 from svenbit: destroy dialog function set to idleTimeout dialog ID instead of jQuery dialog class selector
++ Merge pull request #10 from svenbit: fix hide dialog "x" close button to select only jquery-idleTimeout dialog
++ Add ability to translate all display text to desired language. Thanks to Criptos. Closes Pull Request #12.
++ Add information about possible Chrome 'mousemove' bug (on Windows?). Thanks to g4g4r1n. Closes Issue #13.
 
 v1.0.6
 + Modify sessionKeepAliveTimer default to 10 minutes. Set user's current URL as URL to ping. Closes issue #7.
