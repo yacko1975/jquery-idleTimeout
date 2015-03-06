@@ -46,8 +46,9 @@
       errorAlertMessage: 'Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js',
 
       // server-side session keep-alive timer
-      sessionKeepAliveTimer: 600 // Ping the server at this interval in seconds. 600 = 10 Minutes
-      // sessionKeepAliveTimer: false // Set to false to disable pings
+      sessionKeepAliveTimer: 600, // Ping the server at this interval in seconds. 600 = 10 Minutes
+      // sessionKeepAliveTimer: false, // Set to false to disable pings
+      sessionKeepAliveUrl: window.location.href // set URL to ping - does not apply if sessionKeepAliveTimer: false
     },
 
     //##############################
@@ -56,8 +57,7 @@
       opts = $.extend(defaults, options),
       checkHeartbeat = 2, // frequency to check for timeouts in seconds
       origTitle = document.title, // save original browser title
-      sessionKeepAliveUrl = window.location.href, // set URL to ping to user's current window
-      keepSessionAlive, activityDetector,
+      startKeepSessionAlive, stopKeepSessionAlive, keepSession, activityDetector,
       idleTimer, remainingTimer, checkIdleTimeout, idleTimerLastActivity, startIdleTimer, stopIdleTimer,
       openWarningDialog, dialogTimer, checkDialogTimeout, startDialogTimer, stopDialogTimer, isDialogOpen, destroyWarningDialog,
       countdownDisplay, logoutUser;
@@ -65,18 +65,19 @@
     //##############################
     //## Private Functions
     //##############################
-    keepSessionAlive = function () {
+    startKeepSessionAlive = function () {
 
-      if (opts.sessionKeepAliveTimer) {
-        var keepSession = function () {
+      keepSession = function () {
+        if (idleTimerLastActivity === store.get('idleTimerLastActivity')) {
+          $.get(opts.sessionKeepAliveUrl);
+        }
+      };
 
-          if (idleTimerLastActivity === store.get('idleTimerLastActivity')) {
-            $.get(sessionKeepAliveUrl);
-          }
-        };
+      setInterval(keepSession, (opts.sessionKeepAliveTimer * 1000));
+    };
 
-        setInterval(keepSession, (opts.sessionKeepAliveTimer * 1000));
-      }
+    stopKeepSessionAlive = function () {
+      clearInterval(keepSession);
     };
 
     activityDetector = function () {
@@ -149,10 +150,13 @@
         }
       });
 
-      // start the countdown display
       countdownDisplay();
 
       document.title = opts.dialogTitle;
+
+      if (opts.sessionKeepAliveTimer) {
+        stopKeepSessionAlive();
+      }
     };
 
     checkDialogTimeout = function () {
@@ -184,6 +188,10 @@
     destroyWarningDialog = function () {
       $("#idletimer_warning_dialog").dialog('destroy').remove();
       document.title = origTitle;
+
+      if (opts.sessionKeepAliveTimer) {
+        startKeepSessionAlive();
+      }
     };
 
     // display remaining time on warning dialog
@@ -202,6 +210,10 @@
 
     logoutUser = function () {
       store.set('idleTimerLoggedOut', true);
+
+      if (opts.sessionKeepAliveTimer) {
+        stopKeepSessionAlive();
+      }
 
       if (opts.customCallback) {
         opts.customCallback();
@@ -228,7 +240,9 @@
 
       activityDetector();
 
-      keepSessionAlive();
+      if (opts.sessionKeepAliveTimer) {
+        startKeepSessionAlive();
+      }
 
       startIdleTimer();
     });

@@ -1,6 +1,6 @@
 # jquery-idleTimeout
 
-Configurable idle (no activity) timer and logout redirect for jQuery.
+Highly configurable idle (no activity) timer and logout redirect for jQuery.
 
 **Functions across multiple browser windows, tabs and, optionally, iframes in the same domain.**
 
@@ -35,7 +35,8 @@ Custom logout (session close) functions may be added to your 'redirectUrl' page 
 * If **'Stay Logged In'** button on **warning dialog** is clicked, warning dialogs on all other windows and tabs will be dismissed too.
 * If **'Log Out Now'** button on **warning dialog** is clicked, all other windows and tabs will log out too.
 * Optional script to add to your site's **Logout** button
-* Pings server every 10 minutes (default) to prevent server-side session timeout
+* If enabled, pings server every 10 minutes (default) to prevent server-side session timeout
+* Stops server ping if **warning dialog** appears. Restarts server ping if **warning dialog** is dismissed.
 * All displayed text may be modified to your desired language
 
 ### Dependencies
@@ -98,8 +99,9 @@ Use the script with default settings, configure the options when you call the id
       errorAlertMessage: 'Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js',
 
       // server-side session keep-alive timer
-      sessionKeepAliveTimer: 600 // Ping the server at this interval in seconds. 600 = 10 Minutes
-      // sessionKeepAliveTimer: false // Set to false to disable pings
+      sessionKeepAliveTimer: 600, // Ping the server at this interval in seconds. 600 = 10 Minutes
+      // sessionKeepAliveTimer: false, // Set to false to disable pings
+      sessionKeepAliveUrl: window.location.href // set URL to ping - does not apply if sessionKeepAliveTimer: false
     });
   });
 ```

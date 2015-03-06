@@ -48,8 +48,9 @@
       errorAlertMessage: 'Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js',
 
       // server-side session keep-alive timer
-      sessionKeepAliveTimer: 600   // ping the server at this interval in seconds. 600 = 10 Minutes
-      // sessionKeepAliveTimer: false // set to false to disable pings
+      sessionKeepAliveTimer: 600,   // ping the server at this interval in seconds. 600 = 10 Minutes
+      // sessionKeepAliveTimer: false, // set to false to disable pings
+      sessionKeepAliveUrl: window.location.href // set URL to ping - does not apply if sessionKeepAliveTimer: false
     },
 
     //##############################
@@ -58,8 +59,7 @@
       opts = $.extend(defaults, options),
       checkHeartbeat = 2,         // frequency to check for timeouts in seconds
       origTitle = document.title, // save original browser title
-      sessionKeepAliveUrl = window.location.href, // set URL to ping to user's current window
-      keepSessionAlive, activityDetector,
+      startKeepSessionAlive, stopKeepSessionAlive, keepSession, activityDetector,
       idleTimer, remainingTimer, checkIdleTimeout, idleTimerLastActivity, startIdleTimer, stopIdleTimer,
       openWarningDialog, dialogTimer, checkDialogTimeout, startDialogTimer, stopDialogTimer, isDialogOpen, destroyWarningDialog,
       countdownDisplay, logoutUser,
@@ -68,18 +68,21 @@
     //##############################
     //## Private Functions
     //##############################
-    keepSessionAlive = function () {
+    startKeepSessionAlive = function () {
 
-      if (opts.sessionKeepAliveTimer) {
-        var keepSession = function () {
-          if (idleTimerLastActivity === store.get('idleTimerLastActivity')) {
-            console.log('keep session alive function');
-            $.get(sessionKeepAliveUrl);
-          }
-        };
+      keepSession = function () {
+        if (idleTimerLastActivity === store.get('idleTimerLastActivity')) {
+          console.log('start keep session alive function');
+          $.get(opts.sessionKeepAliveUrl);
+        }
+      };
 
-        setInterval(keepSession, (opts.sessionKeepAliveTimer * 1000));
-      }
+      setInterval(keepSession, (opts.sessionKeepAliveTimer * 1000));
+    };
+
+    stopKeepSessionAlive = function () {
+      console.log('stop keep session alive function');
+      clearInterval(keepSession);
     };
 
     activityDetector = function () {
@@ -169,6 +172,11 @@
 
       // change title bar to warning message
       document.title = opts.dialogTitle;
+
+      // stop the session keep-alive ping, if keep-alive is enabled
+      if (opts.sessionKeepAliveTimer) {
+        stopKeepSessionAlive();
+      }
     };
 
     checkDialogTimeout = function () {
@@ -204,6 +212,11 @@
       console.log('dialog destroyed');
       $("#idletimer_warning_dialog").dialog('destroy').remove();
       document.title = origTitle;
+
+      // restart the session keep-alive ping, if keep-alive is enabled
+      if (opts.sessionKeepAliveTimer) {
+        startKeepSessionAlive();
+      }
     };
 
     // display remaining time on warning dialog
@@ -223,6 +236,10 @@
     logoutUser = function () {
       console.log('logout function');
       store.set('idleTimerLoggedOut', true);
+
+      if (opts.sessionKeepAliveTimer) {
+        stopKeepSessionAlive();
+      }
 
       if (opts.customCallback) {
         console.log('logout function custom callback');
@@ -304,7 +321,9 @@
 
       activityDetector();
 
-      keepSessionAlive();
+      if (opts.sessionKeepAliveTimer) {
+        startKeepSessionAlive();
+      }
 
       startIdleTimer();
 
