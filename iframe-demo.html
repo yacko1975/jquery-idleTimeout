@@ -1,72 +1,73 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="text/html; charset=UTF-8" />
-		<title>Jquery-idleTimeout - Demo Page - by JillElaine</title>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="text/html; charset=UTF-8" />
+  <title>Jquery-idleTimeout - Demo Page - by JillElaine</title>
 
-		<link type="text/css" rel="stylesheet" href="stylesheets/main.css"/>
-		<link type="text/css" rel="stylesheet" href="stylesheets/jquery-ui-1.8.21.custom.css"/>
+  <link type="text/css" rel="stylesheet" href="stylesheets/main.css"/>
+  <link type="text/css" rel="stylesheet" href="stylesheets/jquery-ui-1.8.21.custom.css"/>
 
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
-		<script src="javascripts/store.min.js" type="text/javascript"></script>
-		<script src="https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/master/jquery-idleTimeout-iframes.min.js" type="text/javascript"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" type="text/javascript"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" type="text/javascript"></script>
+  <script src="javascripts/store.min.js" type="text/javascript"></script>
+  <script src="javascripts/jquery-idleTimeout-iframes.js" type="text/javascript"></script>
 
-		<script type="text/javascript" charset="utf-8">
-      /*global $: false, jQuery: false, document: false, store: false*/
-      /*jslint indent: 2, sloppy: true*/
+  <script type="text/javascript" charset="utf-8">
+    /*global $: false, jQuery: false, document: false, store: false*/
+    /*jslint indent: 2, sloppy: true*/
 
-      var eventList = 'click keypress scroll wheel mousewheel'; // separate each event with a space
+    $(document).ready(function () {
 
-      $(document).ready(function () {
-
-        $(document).idleTimeout({
-          idleTimeLimit: 15,            // 15 seconds 'No activity' time limit in seconds.
-          redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
-          activityEvents: eventList,    // separate each event with a space
-          dialogDisplayLimit: 30,       // Time to display the warning dialog before logout (and optional callback) in seconds
-          sessionKeepAliveTimer: false  // Set to false to disable pings.
-        });
-
-        $('body').on(eventList, function () {
-          $('#activity').effect('shake');
-        });
+      $(document).idleTimeout({
+	idleTimeLimit: 15,            // 15 seconds 'No activity' time limit in seconds.
+	redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
+	activityEvents: 'click keypress scroll wheel mousewheel',    // separate each event with a space
+	dialogDisplayLimit: 30,       // Time to display the warning dialog before logout (and optional callback) in seconds
+	sessionKeepAliveTimer: false  // Set to false to disable pings.
       });
-		</script>
-	</head>
 
-	<body>
-	  <div>
-	    <div class="main_banner">
-	      <h1>Jquery-idleTimeout - iFrame Demonstration - by JillElaine</h1>
-	    </div>
+    });
+  </script>
+</head>
 
-	    <div class="main_content">
+<body>
+  <div>
+    <div class="main_banner">
+      <h1>Jquery-idleTimeout - iFrame Demonstration - by JillElaine</h1>
+    </div>
 
-        <h2>GitHub Project Page - <a href="https://github.com/JillElaine/jquery-idleTimeout">https://github.com/JillElaine/jquery-idleTimeout</a></h2>
-        <p>This page demonstrates the 'bubbling' of activity events from an iframe <strong><i>within the same domain</i></strong> to the parent page.</p>
-        <p>Activity events that are detected are clicks, keypresses, and wheel scrolling.</p>
-        <p>To see the 'idle timeout' functionality, do not press any keys, click your mouse or scroll your mousewheel for 15 seconds.</p>
+    <div class="main_content">
 
-        <h3>Functions across multiple windows, tabs <strong>AND IFRAMES</strong> within the same domain</h3>
+      <h2>GitHub Project Page - <a href="https://github.com/JillElaine/jquery-idleTimeout">https://github.com/JillElaine/jquery-idleTimeout</a></h2>
+      <p>This page demonstrates the 'bubbling' of activity events from an iframe <strong><i>within the same domain</i></strong> to the parent page.</p>
+      <p>Activity events that are detected are clicks, keypresses, and wheel scrolling.</p>
+      <p>To see the 'idle timeout' functionality, do not press any keys, click your mouse or scroll your mousewheel for 15 seconds.</p>
 
-        <h4><a href="http://jillelaine.github.io/jquery-idleTimeout/iframe-demo.html" target="_blank">Try it! Click here to open another browser window/tab of this page.</a></h4>
+      <h3>Functions across multiple windows, tabs <strong>AND IFRAMES</strong> within the same domain</h3>
 
-        <h3>Activity Detector</h3>
-        <div id="activity" class="activity_detected"><h4>Activity Detected!</h4></div>
+      <h4><a href="http://jillelaine.github.io/jquery-idleTimeout/iframe-demo.html" target="_blank">Try it! Click here to open another browser window/tab of this page.</a></h4>
 
-        <h3>Iframes</h3>
-        <p>Activity within the first iframe is detected because the 'child' page within the ifram is from the <strong><i>same domain</i></strong>.</p>
-        <p>Activity within the second iframe is <strong>NOT</strong> detected because the 'child' page within the iframe is from a <strong><i>different domain</i></strong>, w3schools.com.</p>
+      <h3>Activity Detector</h3>
+      <div id="activity" class="activity_detected"><h4>Activity Detected!</h4></div>
 
-        <iframe src="iframe-demo-child.html" style="border:3px solid #AB4A0E;height: 400px;">
-        </iframe>
+      <h3>Iframes</h3>
+      <p>Activity within the first iframe is detected because the 'child' page within the iframe is from the <strong><i>same domain</i></strong>.</p>
+      <p>Activity within the second iframe is <strong>NOT</strong> detected because the 'child' page within the iframe is from a <strong><i>different domain</i></strong>, w3schools.com.</p>
 
-        <iframe src="http://www.w3schools.com" style="border:3px solid #AB4A0E;height: 400px;">
-        </iframe>
-
+      <div>
+	<iframe src="iframe-demo-child.html" style="border:3px solid #AB4A0E;height: 400px;">
+	</iframe>
+	<p>Activity is detected within this iframe, because it is with the same domain as the parent page.</p>
       </div>
-	  </div>
-	</body>
+
+      <div>
+	<iframe src="http://www.w3schools.com" style="border:3px solid #AB4A0E;height: 400px;">
+	</iframe>
+	<p>Activity is not detected within this iframe, because it is not from the same domain as the parent page.</p>
+      </div>
+
+    </div>
+  </div>
+</body>
 </html>
