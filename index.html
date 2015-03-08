@@ -17,6 +17,18 @@
       /*global $: false, jQuery: false, document: false, store: false, window: false, alert: false*/
       /*jslint indent: 2, sloppy: true*/
 
+      $(document).ready(function () {
+
+	$(document).idleTimeout({
+	  idleTimeLimit: 15,            // 15 seconds 'No activity' time limit in seconds.
+	  redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
+	  activityEvents: 'click keypress scroll wheel mousewheel',    // separate each event with a space
+	  dialogDisplayLimit: 30,       // Time to display the warning dialog before logout (and optional callback) in seconds
+	  sessionKeepAliveTimer: false  // Set to false to disable pings.
+	});
+
+      });
+      
       var voluntaryLogoutOne = function () {
 	window.location.href = "https://github.com/JillElaine/jquery-idleTimeout";
       };
@@ -29,18 +41,6 @@
 	  alert('Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js');
 	}
       };
-
-      $(document).ready(function () {
-
-	$(document).idleTimeout({
-	  idleTimeLimit: 15,            // 15 seconds 'No activity' time limit in seconds.
-	  redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
-	  activityEvents: 'click keypress scroll wheel mousewheel',    // separate each event with a space
-	  dialogDisplayLimit: 30,       // Time to display the warning dialog before logout (and optional callback) in seconds
-	  sessionKeepAliveTimer: false  // Set to false to disable pings.
-	});
-
-      });
     </script>
   </head>
 
