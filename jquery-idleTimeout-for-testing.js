@@ -59,7 +59,7 @@
       opts = $.extend(defaults, options),
       checkHeartbeat = 2,         // frequency to check for timeouts in seconds
       origTitle = document.title, // save original browser title
-      startKeepSessionAlive, stopKeepSessionAlive, keepSession, activityDetector,
+      startKeepSessionAlive, stopKeepSessionAlive, keepSession, keepAlivePing, activityDetector,
       idleTimer, remainingTimer, checkIdleTimeout, idleTimerLastActivity, startIdleTimer, stopIdleTimer,
       openWarningDialog, dialogTimer, checkDialogTimeout, startDialogTimer, stopDialogTimer, isDialogOpen, destroyWarningDialog,
       countdownDisplay, logoutUser,
@@ -77,12 +77,12 @@
         }
       };
 
-      setInterval(keepSession, (opts.sessionKeepAliveTimer * 1000));
+      keepAlivePing = setInterval(keepSession, (opts.sessionKeepAliveTimer * 1000));
     };
 
     stopKeepSessionAlive = function () {
       console.log('stop keep session alive function');
-      clearInterval(keepSession);
+      clearInterval(keepAlivePing);
     };
 
     activityDetector = function () {
