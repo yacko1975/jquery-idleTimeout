@@ -54,20 +54,12 @@
       <h3>Iframes</h3>
       <p>Activity within the first iframe is detected because the 'child' page within the iframe is from the <strong><i>same domain</i></strong>.</p>
       <p>Activity within the second iframe is <strong>NOT</strong> detected because the 'child' page within the iframe is from a <strong><i>different domain</i></strong>, w3schools.com.</p>
+ 
+      <iframe src="iframe-demo-child.html" style="border:3px solid #AB4A0E;height: 400px;">
+      </iframe>
 
-      <div>
-      <div class="inline">
-	<iframe src="iframe-demo-child.html" style="border:3px solid #AB4A0E;height: 400px;">
-	</iframe>
-	<p>Activity is detected within this iframe, because it is with the same domain as the parent page.</p>
-      </div>
-
-      <div class="inline">
-	<iframe src="http://www.w3schools.com" style="border:3px solid #AB4A0E;height: 400px;">
-	</iframe>
-	<p>Activity is not detected within this iframe, because it is not from the same domain as the parent page.</p>
-      </div>
-      </div>
+      <iframe src="http://www.w3schools.com" style="border:3px solid #AB4A0E;height: 400px;">
+      </iframe>
 
     </div>
   </div>
