@@ -60,6 +60,9 @@ body {
   padding:10px;
   width: 50%;
 }
+.inline {
+  display: inline;
+}
 .float_left {
   float: left;
 }
