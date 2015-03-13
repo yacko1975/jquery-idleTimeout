@@ -15,6 +15,9 @@ body {
   background-color: #444444;
   padding: 0;
 }
+td {
+  border: 2px solid #BBBBBB;
+}
 .main_banner {
   background-color: #AB4A0E;
   border: 1px solid #FFCC88;
@@ -54,17 +57,39 @@ body {
   padding: 3px 3px 3px 22px;
   width: auto;
 }
+.borderize {
+  border:3px solid #AB4A0E; 
+}
+.height200 {
+  height: 200px;
+}
+.height300 {
+  height: 300px;
+}
+.height400 {
+  height: 400px;
+}
 .activity_detected {
   background-color:yellow;
-  border:solid 1px black;
-  padding:10px;
+  font-size: 1.3em;
+  margin: 0;
+  padding: 0;
   width: 50%;
 }
-.inline {
-  display: inline;
+.left {
+  text-align: left;
 }
 .float_left {
   float: left;
+}
+.clear_both {
+  clear: both;
+}
+.add {
+  background: #858585 url("https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/gh-pages/add.png") no-repeat scroll 4px 3px ;
+}
+.close {
+  background: url("https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/gh-pages/close.png") no-repeat scroll 4px 3px #858585;
 }
 .logoutall {
   background: url("https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/gh-pages/logout_green.png") no-repeat scroll 4px 3px #858585;

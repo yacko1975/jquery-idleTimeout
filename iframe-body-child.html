@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>jquery-idleTimeout - Insert into Document Body IFrame Test Page - Child</title>
+
+    <style>
+      body {
+	background-color:white;
+	font-size: .75em;
+	}
+    </style>
+
+  </head>
+
+  <body>
+
+    <h2>Iframe Inserted into Document Body Page</h2>
+
+    <p>This is a demonstration of an iframe dynamically inserted into the body of the document.</p>
+
+    <p>The page within this iframe is from the same domain as the parent page.</p>
+
+    <p><strong>If an 'iframe recheck' is called</strong>, activity events within this iframe can be 'detected'.</p>
+    
+    <p>Iframes inserted into the body of the document require special handling. Add this snippet to the function which inserts the iframe: <strong>$.fn.idleTimeout().iframeRecheck();</strong>.</p>
+
+  </body>
+</html>
