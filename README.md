@@ -8,56 +8,55 @@ Listed on JQuery's Plugin site: http://plugins.jquery.com/idleTimeout/
 
 Requires https://github.com/marcuswestin/store.js which uses localStorage, globalStorage and userData behavior to 'communicate' across multiple browser windows/tabs without cookies or flash.
 
-### Demo Page - http://jillelaine.github.io/jquery-idleTimeout/
+#### Demo Page - http://jillelaine.github.io/jquery-idleTimeout/
 
-#### Iframes Demo Page - http://jillelaine.github.io/jquery-idleTimeout/iframe-demo.html
+##### Iframes Demo Page - http://jillelaine.github.io/jquery-idleTimeout/iframe-demo.html
 
-If the warning dialog box is *enabled*:
-* After the 'idleTimeLimit' amount of user inactivity, the warning dialog box with 2 buttons, 'Stay Logged In' & 'Log Out Now', appears. 'Stay Logged In' button may be activated with mouse click or press of Enter key.
+**If the warning dialog box is enabled:**
+* After the 'idleTimeLimit' amount of user inactivity, the warning dialog box with 2 configurable buttons appear. Default button may be activated with mouse click or press of Enter key.
 * Warning dialog includes countdown 'Time remaining' display.
-* Browser window/tab title bar(s) display warning if user is inactive for the 'idleTimeLimit'. Original browser title restored to all windows/tabs when warning dialog is dismissed.
-* Warning dialog will display for the 'dialogDisplayLimit' amount of time. If no user activity, idleTimer will redirect to configured 'redirectUrl'.
+* Browser window/tab title bar(s) display warning if user is inactive for the configured 'idleTimeLimit'. Original browser title restored to all windows/tabs when warning dialog is dismissed.
+* Warning dialog will display for the configured 'dialogDisplayLimit' amount of time. If no user activity, idleTimer will redirect to configured 'redirectUrl'.
 
 ![Warning Dialog](https://raw.github.com/JillElaine/jquery-idleTimeout/master/warning_dialog.png)
 
-If the warning dialog box is *disabled*:
-* After the 'idleTimeLimit' amount of user inactivity, idleTimer will redirect to configured 'redirectUrl'.
+**If the warning dialog box is disabled:**
+* After the configured 'idleTimeLimit' amount of user inactivity, idleTimer will redirect to configured 'redirectUrl'.
 * No warning dialog box will appear and browser window/tab title bar(s) do not display a warning.
 
-Custom logout (session close) functions may be added to your 'redirectUrl' page or to the optional configuration's 'customCallback'.
+Custom logout (ie: session close) functions may be added to your 'redirectUrl' page or to the optional configuration's 'customCallback'.
 
-### Communication Across Multiple Browser Windows, Tabs and Iframes in the Same Domain
+#### Communication Across Multiple Browser Windows, Tabs and Iframes in the Same Domain
 
 * Functions across multiple instances of a browser and across multiple tabs within the same domain
-* Use **jquery-idleTimeout-iframes.js** if detection of activity within iframes is desired
+* Use **jquery-idleTimeout-iframes.min.js** if detection of activity within iframes is required
 * If a window or tab is logged out, all other windows and tabs will log out too.
 * If enabled, if **warning dialog** pops up on a window or tab, **warning dialog** appears on all other windows and tabs too.
 * If **'Stay Logged In'** button on **warning dialog** is clicked, warning dialogs on all other windows and tabs will be dismissed too.
 * If **'Log Out Now'** button on **warning dialog** is clicked, all other windows and tabs will log out too.
-* Optional script to add to your site's **Logout** button
-* If enabled, pings server every 10 minutes (default) to prevent server-side session timeout
+* Optional script to add to your site's voluntary (manual) **Logout** button
+* If enabled, keep-alive pings server every 10 minutes (default) to prevent server-side session timeout
 * Stops server ping if **warning dialog** appears. Restarts server ping if **warning dialog** is dismissed.
 * All displayed text may be modified to your desired language
 
-### Dependencies
+#### Dependencies
 
-The following dependency is required: https://github.com/marcuswestin/store.js - version 1.3.4+
+* The following dependency is required: https://github.com/marcuswestin/store.js - version 1.3.4 or newer
+* Additionally, JQuery version 1.7 or newer and JQuery UI version 1.9 or newer are required.
 
-Additionally, JQuery version 1.7+ and JQuery UI version 1.9+ are required.
-
-## How to Use
+#### How to Use
 
 Download the minified code, jquery-idleTimeout.min.js or jquery-idleTimeout-iframes.min.js, or download jquery-idleTimeout.js if you want to edit the configuration of the script directly. Upload the .js file and make it available to your website.
 
 Do the same with https://github.com/marcuswestin/store.js: store.min.js.
 
-Call the idle-Timeout script in a 'document.ready' function somewhere on your site. See the example.html https://github.com/JillElaine/jquery-idleTimeout/blob/master/example.html
+Call the idle-Timeout script in a 'document.ready' function somewhere on your site. 
 
 Configure the 'redirectUrl' to redirect to your site's logout page.
 
 Use the script with default settings, configure the options when you call the idleTimeout function at run-time, or edit the configuration variables at top of jquery-idleTimeout.js.
 
-### Run with Defaults
+##### Run with Defaults
 
 ```Javascript
   $(document).ready(function () {
@@ -67,46 +66,20 @@ Use the script with default settings, configure the options when you call the id
   });
 ```
 
-### Configuration May be Overridden at Run-Time
+##### Configuration May be Overridden at Run-Time
 
-```Javascript
-  $(document).ready(function () {
-    $(document).idleTimeout({
-      idleTimeLimit: 1200,       // 'No activity' time limit in seconds. 1200 = 20 Minutes
-      redirectUrl: '/logout',    // redirect to this url on timeout logout. Set to "redirectUrl: false" to disable redirect
+Please see https://github.com/JillElaine/jquery-idleTimeout/blob/master/example.html
 
-      // optional custom callback to perform before logout
-      customCallback: false,     // set to false for no customCallback
-      // customCallback:    function () {    // define optional custom js function
-          // perform custom action before logout
-      // },
+#### Additional Iframe Information
+Activity can be detected in only iframes **from the same domain** as the parent page. If you require activity detection within iframes, use the jquery-idleTimeout-iframe.min.js script. 
 
-      // configure which activity events to detect
-      // http://www.quirksmode.org/dom/events/
-      // https://developer.mozilla.org/en-US/docs/Web/Reference/Events
-      activityEvents: 'click keypress scroll wheel mousewheel mousemove', // separate each event with a space
+Iframes available within the document at time of page load are detected via a 'check-for-iframes' function, and activity within these iframes is 'bubbled' to the page body.
 
-      // warning dialog box configuration
-      enableDialog: true,        // set to false for logout without warning dialog
-      dialogDisplayLimit: 180,   // time to display the warning dialog before logout (and optional callback) in seconds. 180 = 3 Minutes
-      dialogTitle: 'Session Expiration Warning',
-      dialogText: 'Because you have been inactive, your session is about to expire.',
-      dialogTimeRemaining: 'Time remaining',
-      dialogStayLoggedInButton: 'Stay Logged In',
-      dialogLogOutNowButton: 'Log Out Now',
+**Dynamically Added Iframes:** Iframes added *after* the page loads require a recheck-for-iframes. 
+* Iframes within **dialogs are automatically rechecked** when the dialog opens. 
+* Iframes inserted via javascript to the **body of the document require special handling**: you must manually call the iframe recheck. Add this snippet to the function which inserts the iframe: **$.fn.idleTimeout().iframeRecheck();** 
 
-      // error message
-      errorAlertMessage: 'Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js',
-
-      // server-side session keep-alive timer
-      sessionKeepAliveTimer: 600, // Ping the server at this interval in seconds. 600 = 10 Minutes
-      // sessionKeepAliveTimer: false, // Set to false to disable pings
-      sessionKeepAliveUrl: window.location.href // set URL to ping - does not apply if sessionKeepAliveTimer: false
-    });
-  });
-```
-
-## Optional Functionality for Voluntary Logout
+#### Optional Functionality for Voluntary Logout
 If user voluntarily logs out of your site with your 'Logout' button (instead of timing out), you can force all 'same domain' windows/tabs to log out too! Attach a small snippet of javascript to the 'onclick' function of your 'Logout' button.
 
 ##### Create 'voluntaryLogoutAll' Function to Attach to Logout Button

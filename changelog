@@ -6,9 +6,10 @@ v.1.0.8
 + Merge pull request #9 from svenbit: destroy dialog function set to idleTimeout dialog ID instead of jQuery dialog class selector
 + Merge pull request #10 from svenbit: fix hide dialog "x" close button to select only jquery-idleTimeout dialog
 + Add ability to translate all display text to desired language. Thanks to Criptos. Closes Pull Request #12.
-+ Add information about possible Chrome 'mousemove' bug (on Windows?). Thanks to g4g4r1n. Closes Issue #13.
++ Add information to README about possible Chrome 'mousemove' bug (on Windows?). Thanks to g4g4r1n. Closes Issue #13.
 + Make sessionKeepAliveUrl a public variable. Closes issue #15.
 + Stop session keep-alive pings when warning dialog appears; restart keep-alive if warning dialog is dismissed. Closes issue #16.
++ Add ability to detect iframes that are dynamically added to the document, including iframes in dialogs. Closes issue #14.
 
 v1.0.6
 + Modify sessionKeepAliveTimer default to 10 minutes. Set user's current URL as URL to ping. Closes issue #7.

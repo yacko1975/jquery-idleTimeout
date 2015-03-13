@@ -18,7 +18,7 @@
   $.fn.idleTimeout = function (options) {
     console.log('start');
     //##############################
-    //## Configuration Variables
+    //## Public Configuration Variables
     //##############################
     var defaults = {
       idleTimeLimit: 30,           // 30 seconds for testing. 'No activity' time limit in seconds. 1200 = 20 Minutes
@@ -38,7 +38,7 @@
       // warning dialog box configuration
       enableDialog: true,           // set to false for logout without warning dialog
       dialogDisplayLimit: 20,       // 20 seconds for testing. Time to display the warning dialog before logout (and optional callback) in seconds. 180 = 3 Minutes
-      dialogTitle: 'Session Expiration Warning',
+      dialogTitle: 'Session Expiration Warning', // also displays on browser title bar
       dialogText: 'Because you have been inactive, your session is about to expire.',
       dialogTimeRemaining: 'Time remaining',
       dialogStayLoggedInButton: 'Stay Logged In',
@@ -66,15 +66,23 @@
       checkForIframes, includeIframes, attachEventIframe; // iframe functionality
 
     //##############################
+    //## Public Functions
+    //##############################
+    // trigger a recheck for iframes
+    // to use this public function on your page, call $.fn.idleTimeout().iframeRecheck()
+    this.iframeRecheck = function () {
+      console.log('triggered recheck for iframes');
+      checkForIframes();
+    };
+
+    //##############################
     //## Private Functions
     //##############################
     startKeepSessionAlive = function () {
 
       keepSession = function () {
-        if (idleTimerLastActivity === store.get('idleTimerLastActivity')) {
-          console.log('start keep session alive function');
-          $.get(opts.sessionKeepAliveUrl);
-        }
+        console.log('keep session alive function');
+        $.get(opts.sessionKeepAliveUrl);
       };
 
       keepAlivePing = setInterval(keepSession, (opts.sessionKeepAliveTimer * 1000));
@@ -173,7 +181,7 @@
       // change title bar to warning message
       document.title = opts.dialogTitle;
 
-      // stop the session keep-alive ping, if keep-alive is enabled
+      // if keep-alive is enabled, stop the session keep-alive ping
       if (opts.sessionKeepAliveTimer) {
         stopKeepSessionAlive();
       }
@@ -213,7 +221,7 @@
       $("#idletimer_warning_dialog").dialog('destroy').remove();
       document.title = origTitle;
 
-      // restart the session keep-alive ping, if keep-alive is enabled
+      // if keep-alive is enabled, restart the session keep-alive ping 
       if (opts.sessionKeepAliveTimer) {
         startKeepSessionAlive();
       }
@@ -252,6 +260,16 @@
       }
     };
 
+    // triggered when a dialog is opened
+    $("body").on("dialogopen", function () {
+      if (opts.enableDialog && isDialogOpen() !== true) {
+        console.log('dialog (not the idleTimeout warning dialog) opened. Recheck for iframes.');
+        checkForIframes();
+      } else {
+        console.log('IdleTimeout warning dialog opened. No recheck for iframes.');
+      }
+    });
+
     // document must be in readyState 'complete' before looking for iframes
     checkForIframes = function () {
 
@@ -281,12 +299,19 @@
 
           iframeItem = foundIframes.item(index);
 
-          if (iframeItem.attachEvent) { // IE < 11. Returns a boolean true/false
-            console.log('attach event to iframe. Browser IE < 11');
-            iframeItem.attachEvent('onload', attachEventIframe(index));
-          } else { // IE >= 11 and FF, etc.
-            console.log('attach event to iframe. Browser NOT IE < 11');
-            iframeItem.addEventListener('load', attachEventIframe(index), false);
+          try {  // attach events only to 'same domain' iframes, and not to cross-site iframes
+
+            if (iframeItem.attachEvent) { // IE < 11. Returns a boolean true/false
+              console.log('attach event to iframe. Browser IE < 11');
+              iframeItem.attachEvent('onload', attachEventIframe(index));
+            } else { // IE >= 11 and FF, etc.
+              console.log('attach event to iframe. Browser NOT IE < 11');
+              iframeItem.addEventListener('load', attachEventIframe(index), false);
+            }
+
+          } catch (err) { // cross-site iframe - events cannot be attached
+            // nothing to do
+            console.log('cross-site iframe. Events not attached.');
           }
 
         } // end for loop

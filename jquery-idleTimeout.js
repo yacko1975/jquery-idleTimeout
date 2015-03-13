@@ -16,7 +16,7 @@
   $.fn.idleTimeout = function (options) {
 
     //##############################
-    //## Configuration Variables
+    //## Public Configuration Variables
     //##############################
     var defaults = {
       idleTimeLimit: 1200,       // 'No activity' time limit in seconds. 1200 = 20 Minutes
@@ -36,7 +36,7 @@
       // warning dialog box configuration
       enableDialog: true,        // set to false for logout without warning dialog
       dialogDisplayLimit: 180,   // time to display the warning dialog before logout (and optional callback) in seconds. 180 = 3 Minutes
-      dialogTitle: 'Session Expiration Warning',
+      dialogTitle: 'Session Expiration Warning', // also displays on browser title bar
       dialogText: 'Because you have been inactive, your session is about to expire.',
       dialogTimeRemaining: 'Time remaining',
       dialogStayLoggedInButton: 'Stay Logged In',
@@ -68,9 +68,7 @@
     startKeepSessionAlive = function () {
 
       keepSession = function () {
-        if (idleTimerLastActivity === store.get('idleTimerLastActivity')) {
-          $.get(opts.sessionKeepAliveUrl);
-        }
+        $.get(opts.sessionKeepAliveUrl);
       };
 
       keepAlivePing = setInterval(keepSession, (opts.sessionKeepAliveTimer * 1000));
