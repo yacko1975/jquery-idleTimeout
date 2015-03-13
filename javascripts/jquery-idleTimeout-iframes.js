@@ -270,8 +270,10 @@
           try {  // attach events only to 'same domain' iframes, and not to cross-site iframes
 
             if (iframeItem.attachEvent) { // IE < 11. Returns a boolean true/false
+	      iframeItem.detachEvent('onload', attachEventIframe(index));
               iframeItem.attachEvent('onload', attachEventIframe(index));
             } else { // IE >= 11 and FF, etc.
+	      iframeItem.removeEventListener('load', attachEventIframe(index), false);
               iframeItem.addEventListener('load', attachEventIframe(index), false);
             }
 
