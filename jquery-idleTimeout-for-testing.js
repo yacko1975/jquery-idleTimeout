@@ -301,12 +301,21 @@
 
           try {  // attach events only to 'same domain' iframes, and not to cross-site iframes
 
-            if (iframeItem.attachEvent) { // IE < 11. Returns a boolean true/false
-              console.log('attach event to iframe. Browser IE < 11');
-              iframeItem.attachEvent('onload', attachEventIframe(index));
-            } else { // IE >= 11 and FF, etc.
-              console.log('attach event to iframe. Browser NOT IE < 11');
-              iframeItem.addEventListener('load', attachEventIframe(index), false);
+            // add 'jit-events-attached' class to iframe to allow only one 'activity' event listener per iframe
+            if ($(iframeItem).hasClass('jit-events-attached') === false) {
+
+              if (iframeItem.attachEvent) { // IE < 11. Returns a boolean true/false
+                console.log('attach event to iframe. Browser IE < 11');
+                iframeItem.attachEvent('onload', attachEventIframe(index));
+                $(iframeItem).addClass('jit-events-attached');
+              } else { // IE >= 11 and FF, etc.
+                console.log('attach event to iframe. Browser NOT IE < 11');
+                iframeItem.addEventListener('load', attachEventIframe(index), false);
+                $(iframeItem).addClass('jit-events-attached');
+              }
+
+            } else {
+              console.log('iframe ' + index + ' already has class jit-events-attached');
             }
 
           } catch (err) { // cross-site iframe - events cannot be attached
