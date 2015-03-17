@@ -15,16 +15,16 @@
     <script src="javascripts/store.min.js" type="text/javascript"></script>
     <script src="javascripts/jquery-idleTimeout-iframes.js" type="text/javascript"></script>
 
-    <script type="text/javascript" charset="utf-8">
+   <script type="text/javascript" charset="utf-8">
       /*global $: false, jQuery: false, document: false, store: false*/
       /*jslint indent: 2, sloppy: true*/
 
       $(document).ready(function () {
 
 	$(document).idleTimeout({
-	  idleTimeLimit: 15,            // 15 seconds 'No activity' time limit in seconds.
+	  idleTimeLimit: 60,            // 60 seconds 'No activity' time limit in seconds.
 	  redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
-	  activityEvents: 'click keypress scroll wheel mousewheel',    // separate each event with a space
+	  activityEvents: 'click keypress',    // separate each event with a space
 	  dialogDisplayLimit: 30,       // Time to display the warning dialog before logout (and optional callback) in seconds
 	  sessionKeepAliveTimer: false  // Set to false to disable pings.
 	});
@@ -45,31 +45,36 @@
 	
 	<h3>Functions across multiple windows, tabs <strong>AND IFRAMES</strong> within the same domain</h3>
 	
-	<h3>Demonstrations on this Page</h3>
+	<p>Activity events detected, as configured by the idle-Timeout setup on this demonstration page, are clicks and keypresses ONLY. To see the 'idle timeout' functionality, do not press any keys, click your mouse or scroll your mousewheel for <strong>60 seconds</strong>.</p>
+	
+	<h3>Demonstrates the 'Bubbling' of Activity Events</h3>
 	  <ul>
-	    <li>The 'bubbling' of activity events from 'same domain' iframes to the parent page.</li>
-	    <li>The detection of activity events within dynamic JQuery UI Dialogs, with and without 'same domain' iframes, both modal and non-modal.</li>
-	    <li>The detection of activity events within dynamic non-iframe dom elements such as divs.</li>
-	    <li>The 'bubbling' of activity events within dynamic 'same domain' iframes inserted into the body of the document. Iframes inserted via javascript to the <strong>body of the document require special handling</strong>: manually call the 'iframe recheck' function. Add this snippet to the function which inserts the iframe: <strong>$.fn.idleTimeout().iframeRecheck();</strong></li>
+	    <li>From 'same domain' iframes to the parent page with both single and nested iframes.</li>
+	    <li>From dynamic JQuery UI Dialogs with and without iframes, single and nested iframes, modal and non-modal dialogs.</li>
+	    <li>From dynamic dom elements such as divs inserted into the body of the document.</li>
+	    <li>From dynamic 'same domain', nested and unnested, iframes inserted into the body of the document. <strong>NOTE:</strong> Iframes inserted via javascript into the <strong>body of the document require special handling</strong>: manually call the 'iframe recheck' function. Add this snippet to the function which inserts the iframe: <strong>$.fn.idleTimeout().iframeRecheck();</strong></li>
 	  </ul>
-	    
-	  <p>Activity events detected, as configured by the idle-Timeout setup on this demonstration page, are clicks, keypresses, and wheel scrolls. To see the 'idle timeout' functionality, do not press any keys, click your mouse or scroll your mousewheel for <strong>15 seconds</strong>.</p>
-	  
+	      
 	  <p><strong>Remember, activity within iframes that are <strong>NOT</strong> from the same domain as the parent page CANNOT be detected.</strong></p>
-
+	  
 	<!-- Basic Iframes Demonstration -->
 
 	<h2>Basic Iframes Demonstrations</h2>
 	  <ul>
-	    <li>Activity within the iframe on the left is detected because the 'child' page within the iframe is from the <strong><i>same domain</i></strong> as the parent page.</li>
+	    <li>The idleTimeout plugin attaches an 'event listener' to 'same domain' iframes. The listener enables activity events within the iframe to 'bubble' to the parent page.</li>
+	    <li>Activity within the single iframe on the left is detected because the 'child' page within the iframe is from the <strong><i>same domain</i></strong> as the parent page.</li>
+	    <li>Activity within the nested iframes in the middle are detected because the 'child' pages within the iframes are from the <strong><i>same domain</i></strong> as the parent page.</li>
 	    <li>Activity within the iframe on the right is <strong>NOT</strong> detected because the 'child' page within the iframe is from a <strong><i>different domain</i></strong>, w3schools.com.</li>
-	    <li>The idleTimeout plugin attachs an 'event listener' to 'same domain' iframes. The listener enables activity events within the iframe to 'bubble' to the parent page.</li>
 	 </ul>
 	 
 	 <table>
-	  <tr>
-	    <td>	      
+	  <tr>	      	  	    
+	    <td>
 	      <iframe src="iframe-demo-child.html" class="borderize height200">
+	      </iframe>
+	    </td>
+	    <td>	      
+	      <iframe src="iframe-nested-child.html" class="borderize height200">
 	      </iframe>
 	    </td>
 	    <td>
@@ -80,27 +85,30 @@
 	 </table>
  
 	<div id="activity" class="borderize activity_detected"><p>I shake when activity is detected.</p></div>
-	
+
 	<!-- New Dialog Demonstrations -->
 	
 	<h2>New Dialog Demonstrations</h2>
 	  <ul>
-	    <li>This demonstration includes examples of both modal and non-modal dialogs, with and without iframes within the dialog.</li>
-	    <li>Activity is detected within new dialogs without iframes. The idleTimeout plugin 'listens' for the opening of dialogs and, if the dialog includes an iframe, an 'event listener' is added to the iframe.</li>
+	    <li>This demonstration includes examples of both modal and non-modal dialogs, with and without iframes within the dialog, with both single and nested iframes.</li>
+	    <li>The idleTimeout plugin 'listens' for the opening of dialogs and, if the dialog includes any iframes, an 'event listener' is added to each iframe.</li>
 	  </ul>
 	  
 	 <table>
 	  <tr>
 	    <td>
-	      <h3>New Iframe Dialog - Non-Modal</h3>
+	      <h3>Single Iframe Dialog - Non-Modal</h3>
 	      <input type="button" value="Open New Iframe Dialog" onclick="dialogIframe.dialog('open')" class="button add left">
-
-	      <div id="dialog-iframe" title="Iframe Dialog"></div>
+	      <div id="dialog-iframe" title="Single Iframe Dialog"></div>
+	    </td>
+	    <td>
+	      <h3>Nested Iframe Dialog - Non-Modal</h3>
+	      <input type="button" value="Open New Iframe Dialog" onclick="nestedDialogIframe.dialog('open')" class="button add left">
+	      <div id="nested-dialog-iframe" title="Nested Iframe Dialog"></div>    
 	    </td>
 	    <td>
 	      <h3>New Form Dialog - Modal</h3>
 	      <input type="button" value="Open Form Dialog" onclick="dialogForm.dialog('open')" class="button add left">
-
 	      <div id="dialog-form" title="Form Dialog">
 		<p>This is a demonstration of a modal dialog form with no iframe.</p>
 		<form>
@@ -123,7 +131,7 @@
 	<!-- New Inserted Dom Div & Iframe Elements Demonstrations -->
 	
 	<h2>New Inserted Dom Elements Demonstrations</h2>
-	  <p>Examples of dynamic div insertion & dynamic iframes, both same domain and other domain.</p>
+	  <p>Examples of dynamic div insertion & dynamic iframes, single and nested, same domain and other domain.</p>
 	  
 	<!-- New Inserted Divs Demonstrations -->
 	
@@ -135,12 +143,17 @@
 	 <table>
 	  <tr>
 	    <td>
-	      <h3>New Iframe Insertion - Same Domain</h3>
+	      <h4>Iframe Insertion - Same Domain</h4>
 	      <input type="button" value="Insert New Iframe - Same Domain" onclick='$("#new-iframe-same-domain").append("<iframe src=\"iframe-body-child.html\" class=\"borderize height200\"></iframe>");$.fn.idleTimeout().iframeRecheck();' class="button add left">
 	      <div id="new-iframe-same-domain"></div>
 	    </td>
 	    <td>
-	      <h3>New Iframe Insertion - Other Domain</h3>
+	      <h4>Nested Iframe Insertion - Same Domain</h4>
+	      <input type="button" value="Insert Nested Iframe - Same Domain" onclick='$("#nested-iframe-same-domain").append("<iframe src=\"iframe-nested-child.html\" class=\"borderize height200\"></iframe>");$.fn.idleTimeout().iframeRecheck();' class="button add left">
+	      <div id="nested-iframe-same-domain"></div>    
+	    </td>
+	    <td>
+	      <h4>New Iframe Insertion - Other Domain</h4>
 	      <input type="button" value="Insert New Iframe - Other Domain" onclick='$("#new-iframe-other-domain").html("<iframe src=\"http://w3schools.com\" class=\"borderize height200\"></iframe>");$.fn.idleTimeout().iframeRecheck();' class="button add left">
 	      <div id="new-iframe-other-domain"></div>
 	    </td>
@@ -150,8 +163,7 @@
       </div>
     </div>
   </body>
-  
-  <script>
+    <script>
     /**
     * Dynamic Dialogs
     *
@@ -161,7 +173,7 @@
     $(function () {
       dialogIframe = $("#dialog-iframe").dialog({
 	autoOpen: false,
-	height: 300,
+	height: 450,
 	width: 350,
 	modal: false,
 	buttons: [{
@@ -177,7 +189,32 @@
 	  }
 	}],
       open: function () {
-	dialogIframe.append('<iframe src="iframe-dialog-child.html" class="borderize height200"></iframe>');
+	dialogIframe.append('<iframe src="iframe-dialog-child.html" class="borderize height300"></iframe>');
+      }
+      });
+    });
+    
+    var nestedDialogIframe
+    $(function () {
+      nestedDialogIframe = $("#nested-dialog-iframe").dialog({
+	autoOpen: false,
+	height: 500,
+	width: 350,
+	modal: false,
+	buttons: [{
+	  text: "Click It",
+	  click: function () {
+	    // non-functioning button
+	  }
+	},
+	{
+	  text: "Cancel-Close",
+	  click: function () {
+	    nestedDialogIframe.dialog("close");
+	  }
+	}],
+      open: function () {
+	nestedDialogIframe.append('<iframe src="iframe-nested-child.html" class="borderize height400"></iframe>');
       }
       });
     });
@@ -269,4 +306,5 @@
 
     });
   </script>
+
 </html>
