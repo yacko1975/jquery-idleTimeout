@@ -185,7 +185,7 @@
 	{
 	  text: "Cancel-Close",
 	  click: function () {
-	    dialogIframe.dialog("close");
+	    dialogIframe.dialog("destroy").remove();
 	  }
 	}],
       open: function () {
@@ -210,7 +210,7 @@
 	{
 	  text: "Cancel-Close",
 	  click: function () {
-	    nestedDialogIframe.dialog("close");
+	    nestedDialogIframe.dialog("destroy").remove();
 	  }
 	}],
       open: function () {
