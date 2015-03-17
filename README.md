@@ -2,7 +2,7 @@
 
 Highly configurable idle (no activity) timer and logout redirect for jQuery.
 
-**Functions across multiple browser windows, tabs and, optionally, iframes in the same domain.**
+**Functions across multiple browser windows, tabs and, optionally, iframes (single or nested) in the same domain.**
 
 Listed on JQuery's Plugin site: http://plugins.jquery.com/idleTimeout/
 
@@ -73,11 +73,12 @@ Please see https://github.com/JillElaine/jquery-idleTimeout/blob/master/example.
 #### Additional Iframe Information
 Activity can be detected in only iframes **from the same domain** as the parent page. If you require activity detection within iframes, use the jquery-idleTimeout-iframe.min.js script. 
 
-Iframes available within the document at time of page load are detected via a 'check-for-iframes' function, and activity within these iframes is 'bubbled' to the page body.
+Iframes, both single and nested, that are available within the document at time of page load are detected via a 'check-for-iframes' function, and activity within these iframes is 'bubbled' to the page body.
 
 **Dynamically Added Iframes:** Iframes added *after* the page loads require a recheck-for-iframes. 
-* Iframes within **dialogs are automatically rechecked** when the dialog opens. 
-* Iframes inserted via javascript to the **body of the document require special handling**: you must manually call the iframe recheck. Add this snippet to the function which inserts the iframe: **$.fn.idleTimeout().iframeRecheck();** 
+* Iframes, single and nested, within **dialogs are automatically rechecked** when the dialog opens. 
+* Iframes, single and nested, inserted via javascript to the **body of the document require special handling**: you must manually call the iframe recheck. Add this snippet to the function which inserts the iframe: **$.fn.idleTimeout().iframeRecheck();**
+* Note: if multiple iframes are dynamically added very quickly, it's possible that not all iframes will be included in the activity event 'bubbling'.
 
 #### Optional Functionality for Voluntary Logout
 If user voluntarily logs out of your site with your 'Logout' button (instead of timing out), you can force all 'same domain' windows/tabs to log out too! Attach a small snippet of javascript to the 'onclick' function of your 'Logout' button.

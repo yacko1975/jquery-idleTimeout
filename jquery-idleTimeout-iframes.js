@@ -254,50 +254,53 @@
       isDocReady = setInterval(docReadyCheck, 1000);
     };
 
-    // look for iframes
-    includeIframes = function () {
+    // find and include iframes
+    includeIframes = function (elementContents) {
 
-      var foundIframes = document.getElementsByTagName('iframe'), index, iframeItem;
+      if (!elementContents) {
+        elementContents = $(document);
+      }
 
-      if (foundIframes.length > 0) { //at least one iframe found
+      var iframeCount = 0;
 
-        // attach events to each iframe found
-        for (index = 0; index < foundIframes.length; index++) {
+      elementContents.find('iframe,frame').each(function () {
 
-          iframeItem = foundIframes.item(index);
+        if ($(this).hasClass('jit-inspected') === false) {
 
-          try {  // attach events only to 'same domain' iframes, and not to cross-site iframes
+          try {
 
-            // add 'jit-events-attached' class to iframe to allow only one 'activity' event listener per iframe
-            if ($(iframeItem).hasClass('jit-events-attached') === false) {
+            includeIframes($(this).contents()); // recursive call to include nested iframes
 
-              if (iframeItem.attachEvent) { // IE < 11. Returns a boolean true/false
-                iframeItem.attachEvent('onload', attachEventIframe(index));
-                $(iframeItem).addClass('jit-events-attached');
-              } else { // IE >= 11 and FF, etc.
-                iframeItem.addEventListener('load', attachEventIframe(index), false);
-                $(iframeItem).addClass('jit-events-attached');
-              }
+            $(this).on('load', attachEventIframe($(this))); // Browser NOT IE < 11
 
-            } // iframe has class 'jit-events-attached' - move along
+            var domElement = $(this)[iframeCount]; // convert jquery object to dom element
 
-          } catch (ignore) { // cross-site iframe - events cannot be attached
-            // nothing to do
+            if (domElement.attachEvent) { // Older IE Browser < 11
+              domElement.attachEvent('onload', attachEventIframe($(this)));
+            }
+
+            iframeCount++;
+
+          } catch (err) {
+            $(this).addClass('cross-site jit-inspected');
           }
 
-        } // end for loop
+        }
 
-      } // end if any iframes
+      });
+
     };
 
     // attach events to each iframe
-    attachEventIframe = function (index) {
+    attachEventIframe = function (iframeItem) {
 
-      var iframe = $('iframe:eq(' + index + ')').contents().find('html');
+      var iframe = iframeItem.contents();
 
       iframe.on(opts.activityEvents, function (event) {
         $('body').trigger(event);
       });
+
+      iframeItem.addClass('jit-inspected');
     };
 
     //###############################

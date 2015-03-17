@@ -286,57 +286,68 @@
       isDocReady = setInterval(docReadyCheck, 1000);
     };
 
-    // look for iframes
-    includeIframes = function () {
-      console.log('include iframes start');
+    // find and include iframes
+    includeIframes = function (elementContents) {
 
-      var foundIframes = document.getElementsByTagName('iframe'), index, iframeItem;
+      console.log('start includeIframes');
 
-      if (foundIframes.length > 0) { //at least one iframe found
-        console.log('iframes found: ' + foundIframes.length);
-        // attach events to each iframe found
-        for (index = 0; index < foundIframes.length; index++) {
+      if (!elementContents) {
+        console.log('elementContents not defined. Define as $(document)');
+        elementContents = $(document);
+      }
 
-          iframeItem = foundIframes.item(index);
+      var iframeCount = 0;
 
-          try {  // attach events only to 'same domain' iframes, and not to cross-site iframes
+      elementContents.find('iframe,frame').each(function () {
 
-            // add 'jit-events-attached' class to iframe to allow only one 'activity' event listener per iframe
-            if ($(iframeItem).hasClass('jit-events-attached') === false) {
+        console.log('start of find iframes');
 
-              if (iframeItem.attachEvent) { // IE < 11. Returns a boolean true/false
-                console.log('attach event to iframe. Browser IE < 11');
-                iframeItem.attachEvent('onload', attachEventIframe(index));
-                $(iframeItem).addClass('jit-events-attached');
-              } else { // IE >= 11 and FF, etc.
-                console.log('attach event to iframe. Browser NOT IE < 11');
-                iframeItem.addEventListener('load', attachEventIframe(index), false);
-                $(iframeItem).addClass('jit-events-attached');
-              }
+        if ($(this).hasClass('jit-inspected') === false) {
 
-            } else {
-              console.log('iframe ' + index + ' already has class jit-events-attached');
+          console.log('first time inpection of iframe - no jit-inspected class');
+
+          try {
+
+            includeIframes($(this).contents()); // recursive call to include nested iframes
+
+            $(this).on('load', attachEventIframe($(this))); // Browser NOT IE < 11
+
+            console.log('iframeCount: ' + iframeCount + '.');
+            var domElement = $(this)[iframeCount]; // convert jquery object to dom element
+
+            if (domElement.attachEvent) { // Older IE Browser < 11
+              console.log('attach event to iframe. Browser IE < 11');
+              domElement.attachEvent('onload', attachEventIframe($(this)));
             }
 
-          } catch (err) { // cross-site iframe - events cannot be attached
-            // nothing to do
-            console.log('cross-site iframe. Events not attached.');
+            iframeCount++;
+
+          } catch (err) {
+            console.log('found cross-site iframe - add class jit-inspected and ignore');
+            $(this).addClass('cross-site jit-inspected');
           }
 
-        } // end for loop
+        } else {
+          console.log('iframe already has class jit-inspected');
+        }
 
-      } // end if any iframes
+      });
+
     };
 
     // attach events to each iframe
-    attachEventIframe = function (index) {
+    attachEventIframe = function (iframeItem) {
 
-      var iframe = $('iframe:eq(' + index + ')').contents().find('html');
+      console.log('attach activity events to iframe');
+
+      var iframe = iframeItem.contents();
 
       iframe.on(opts.activityEvents, function (event) {
         console.log('bubbling iframe activity event to body of page');
         $('body').trigger(event);
       });
+
+      iframeItem.addClass('jit-inspected');
     };
 
     //###############################

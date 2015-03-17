@@ -10,6 +10,7 @@ v.1.0.8
 + Make sessionKeepAliveUrl a public variable. Closes issue #15.
 + Stop session keep-alive pings when warning dialog appears; restart keep-alive if warning dialog is dismissed. Closes issue #16.
 + Add ability to detect iframes that are dynamically added to the document, including iframes in dialogs. Closes issue #14.
++ Add ability to detect and include nested iframes, whether dynamic or static.
 
 v1.0.6
 + Modify sessionKeepAliveTimer default to 10 minutes. Set user's current URL as URL to ping. Closes issue #7.
