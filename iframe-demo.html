@@ -185,11 +185,12 @@
 	{
 	  text: "Cancel-Close",
 	  click: function () {
-	    dialogIframe.dialog("destroy").remove();
+	    dialogIframe.dialog("close");
 	  }
 	}],
       open: function () {
-	dialogIframe.append('<iframe src="iframe-dialog-child.html" class="borderize height300"></iframe>');
+        $('#iframe-dialog-child').remove();
+	dialogIframe.append('<iframe id="iframe-dialog-child" src="iframe-dialog-child.html" class="borderize height300"></iframe>');
       }
       });
     });
@@ -210,11 +211,12 @@
 	{
 	  text: "Cancel-Close",
 	  click: function () {
-	    nestedDialogIframe.dialog("destroy").remove();
+	    nestedDialogIframe.dialog("close");
 	  }
 	}],
       open: function () {
-	nestedDialogIframe.append('<iframe src="iframe-nested-child.html" class="borderize height400"></iframe>');
+	$('#iframe-nested-child').remove();
+	nestedDialogIframe.append('<iframe id="iframe-nested-child" src="iframe-nested-child.html" class="borderize height400"></iframe>');
       }
       });
     });
