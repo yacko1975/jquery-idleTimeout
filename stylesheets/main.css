@@ -87,14 +87,14 @@ td {
   clear: both;
 }
 .add {
-  background: #858585 url("/images/add.png") no-repeat scroll 4px 3px ;
+  background: #858585 url("add.png") no-repeat scroll 4px 3px ;
 }
 .close {
-  background: url("/images/close.png") no-repeat scroll 4px 3px #858585;
+  background: url("close.png") no-repeat scroll 4px 3px #858585;
 }
 .logoutall {
-  background: url("/images/logout_green.png") no-repeat scroll 4px 3px #858585;
+  background: url("logout_green.png") no-repeat scroll 4px 3px #858585;
 }
 .logoutone {
-  background: url("/images/logout_red.png") no-repeat scroll 4px 3px #858585;
+  background: url("logout_red.png") no-repeat scroll 4px 3px #858585;
 }

@@ -43,9 +43,13 @@
 
 	<h2>GitHub Project Page - <a href="https://github.com/JillElaine/jquery-idleTimeout">https://github.com/JillElaine/jquery-idleTimeout</a></h2>
 	
+        <h4>GitHub Wiki Page - <a href="https://github.com/JillElaine/jquery-idleTimeout/wiki">https://github.com/JillElaine/jquery-idleTimeout/wiki</a></h4>
+	
+	<p>Read the Wiki for more information on iframe functionality and troubleshooting.</p>
+	
 	<h3>Functions across multiple windows, tabs <strong>AND IFRAMES</strong> within the same domain</h3>
 	
-	<p>Activity events detected, as configured by the idle-Timeout setup <i>on this demonstration page</i>, are clicks and keypresses ONLY. To see the 'idle timeout' functionality, do not press any keys or click your mouse for <strong>60 seconds</strong>.</p>
+	<p>Activity events detected, as configured by the idle-Timeout setup <i>on this demonstration page</i>, are <strong>CLICKS AND KEYPRESSES ONLY</strong>. To see the 'idle timeout' functionality, do not press any keys or click your mouse for <strong>60 seconds</strong>.</p>
 	
 	<h3>Demonstrates the 'Bubbling' of Activity Events</h3>
 	  <ul>
@@ -55,7 +59,7 @@
 	    <li>From dynamic 'same domain', nested and unnested, iframes inserted into the body of the document. <strong>NOTE:</strong> Iframes inserted via javascript into the <strong>body of the document require special handling</strong>: manually call the 'iframe recheck' function. Add this snippet to the function which inserts the iframe: <strong>$.fn.idleTimeout().iframeRecheck();</strong></li>
 	  </ul>
 	      
-	  <p><strong>Remember, activity within iframe content that does NOT have the same protocol, host and port (Same-Origin Policy) as the parent page CANNOT be detected.</strong> There are methods for 'relaxing' the Same-Origin Policy. Please see: http://en.wikipedia.org/wiki/Same-origin_policy</p>
+	  <p><strong>Remember, activity within iframe content that does NOT have the same protocol, host and port (Same-Origin Policy) as the parent page CANNOT be detected.</strong> There are methods for 'relaxing' the Same-Origin Policy. Please see: <a href="http://en.wikipedia.org/wiki/Same-origin_policy">http://en.wikipedia.org/wiki/Same-origin_policy</a></p>
 	  
 	<!-- Basic Iframes Demonstration -->
 
@@ -107,7 +111,7 @@
 	      <div id="nested-dialog-iframe" title="Nested Iframe Dialog"></div>    
 	    </td>
 	    <td>
-	      <h3>New Form Dialog - Modal</h3>
+	      <h3>Form Dialog - Modal</h3>
 	      <input type="button" value="Open Form Dialog" onclick="dialogForm.dialog('open')" class="button add left">
 	      <div id="dialog-form" title="Form Dialog">
 		<p>This is a demonstration of a modal dialog form with no iframe.</p>
@@ -148,7 +152,7 @@
 	      <div id="nested-iframe-same-domain"></div>    
 	    </td>
 	    <td>
-	      <h4>New Iframe Insertion - Other Domain</h4>
+	      <h4>Iframe Insertion - Other Domain</h4>
 	      <input type="button" value="Insert New Iframe - Other Domain" onclick='$("#new-iframe-other-domain").html("<iframe src=\"http://w3schools.com\" class=\"borderize height200\"></iframe>");$.fn.idleTimeout().iframeRecheck();' class="button add left">
 	      <div id="new-iframe-other-domain"></div>
 	    </td>
@@ -157,7 +161,7 @@
 	 
       <!-- New Inserted Divs Demonstrations -->
 	
-      <h2>New Div Insertion</h2>
+      <h2>Div Insertion</h2>
 	<input id="new-div" type="button" value="Insert New Div After" onclick='$("#new-div").after("<div class=\"borderize\"><p>Newly Inserted Div (Dom Element)</p><p>Activity within this new div is detected.</p></div>")' class="button add left">
 	  
       </div>
