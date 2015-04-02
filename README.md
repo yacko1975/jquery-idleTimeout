@@ -2,61 +2,70 @@
 
 Highly configurable idle (no activity) timer and logout redirect for jQuery.
 
-**Functions across multiple browser windows, tabs and, optionally, iframes (single or nested) in the same domain.**
+**Functions across multiple browser windows, tabs and, optionally, iframes (single or nested) as long as the iframes meet the '[Same-Origin Policy](http://en.wikipedia.org/wiki/Same-origin_policy)'.**
 
 Listed on JQuery's Plugin site: http://plugins.jquery.com/idleTimeout/
 
-Requires https://github.com/marcuswestin/store.js which uses localStorage, globalStorage and userData behavior to 'communicate' across multiple browser windows/tabs without cookies or flash.
+Requires https://github.com/marcuswestin/store.js which uses localStorage, globalStorage and userData behavior to 'communicate' across multiple browser windows & tabs without cookies or flash.
 
 #### Demo Page - http://jillelaine.github.io/jquery-idleTimeout/
 
 ##### Iframes Demo Page - http://jillelaine.github.io/jquery-idleTimeout/iframe-demo.html
 
+#### Wiki - https://github.com/JillElaine/jquery-idleTimeout/wiki
+
+#### Communication Across Multiple Browser Windows, Tabs and Iframes
+
+* Functions across multiple instances of a browser window and across multiple browser tabs within the same domain
+* Use **jquery-idleTimeout-iframes.min.js** if detection of activity within iframes is desired
+
+#### Required Dependencies
+
+* JQuery core - version 1.7 or newer
+* JQuery UI - version 1.9 or newer
+* store.js - https://github.com/marcuswestin/store.js - version 1.3.4 or newer
+
+#### Functionality
+
+* If a window or tab is logged out, all other windows and tabs will log out too
+* If **warning dialog** pops up on a window or tab, a **warning dialog** appears on all other windows and tabs too
+* If **'Stay Logged In'** button on **warning dialog** is clicked, warning dialogs on all other windows and tabs will be dismissed too
+* If **'Log Out Now'** button on **warning dialog** is clicked, all other windows and tabs will log out too
+* Public function for your site's **Logout** button so that all open windows and tabs will logout too
+* Keep-alive pings server every 10 minutes (default) to prevent server-side session timeout
+* All user message text may be modified to your desired language
+* Use the optional configuration variable `customCallback` to add function(s) which execute just before user logout
+
 **If the warning dialog box is enabled:**
-* After the 'idleTimeLimit' amount of user inactivity, the warning dialog box with 2 configurable buttons appear. Default button may be activated with mouse click or press of Enter key.
+* After the `idleTimeLimit` amount of user inactivity, the warning dialog box with 2 buttons appear. Default button may be activated with mouse click or press of Enter key.
 * Warning dialog includes countdown 'Time remaining' display.
-* Browser window/tab title bar(s) display warning if user is inactive for the configured 'idleTimeLimit'. Original browser title restored to all windows/tabs when warning dialog is dismissed.
-* Warning dialog will display for the configured 'dialogDisplayLimit' amount of time. If no user activity, idleTimer will redirect to configured 'redirectUrl'.
+* Browser window and tab title bar(s) display warning message when warning dialog appears. Original browser title restored to all windows and tabs if warning dialog is dismissed.
+* Warning dialog will display for the configured `dialogDisplayLimit` amount of time. If user remains idle, plugin will redirect to configured `redirectUrl`.
 
 ![Warning Dialog](https://raw.github.com/JillElaine/jquery-idleTimeout/master/warning_dialog.png)
 
 **If the warning dialog box is disabled:**
-* After the configured 'idleTimeLimit' amount of user inactivity, idleTimer will redirect to configured 'redirectUrl'.
-* No warning dialog box will appear and browser window/tab title bar(s) do not display a warning.
-
-Custom logout (ie: session close) functions may be added to your 'redirectUrl' page or to the optional configuration's 'customCallback'.
-
-#### Communication Across Multiple Browser Windows, Tabs and Iframes in the Same Domain
-
-* Functions across multiple instances of a browser and across multiple tabs within the same domain
-* Use **jquery-idleTimeout-iframes.min.js** if detection of activity within iframes is required
-* If a window or tab is logged out, all other windows and tabs will log out too.
-* If enabled, if **warning dialog** pops up on a window or tab, **warning dialog** appears on all other windows and tabs too.
-* If **'Stay Logged In'** button on **warning dialog** is clicked, warning dialogs on all other windows and tabs will be dismissed too.
-* If **'Log Out Now'** button on **warning dialog** is clicked, all other windows and tabs will log out too.
-* Optional script to add to your site's voluntary (manual) **Logout** button
-* If enabled, keep-alive pings server every 10 minutes (default) to prevent server-side session timeout
-* Stops server ping if **warning dialog** appears. Restarts server ping if **warning dialog** is dismissed.
-* All displayed text may be modified to your desired language
-
-#### Dependencies
-
-* The following dependency is required: https://github.com/marcuswestin/store.js - version 1.3.4 or newer
-* Additionally, JQuery version 1.7 or newer and JQuery UI version 1.9 or newer are required.
+* After the configured `idleTimeLimit` amount of user inactivity, idleTimer will redirect to configured `redirectUrl`.
+* No warning dialog box will appear and browser window and tab title bar(s) do not display a warning.
 
 #### How to Use
 
-Download the minified code, jquery-idleTimeout.min.js or jquery-idleTimeout-iframes.min.js, or download jquery-idleTimeout.js if you want to edit the configuration of the script directly. Upload the .js file and make it available to your website.
+* Load the required JQuery dependencies on your website: JQuery core and JQuery UI
+* Download store.min.js from https://github.com/marcuswestin/store.js and the appropriate minified jquery-idleTimeout code, jquery-idleTimeout.min.js or jquery-idleTimeout-iframes.min.js
+* Upload these .js files and make them available to your website
+* Call the jquery-idleTimeout script in a 'document ready', **`$(document).ready(function ()...`**, function somewhere on your site
+* Configure the **`redirectUrl`** variable within the 'document ready' function to redirect to your site's logout page
+* Use the public logout function on your site's 'Logout' button: **`$.fn.idleTimeout().logout()`**
 
-Do the same with https://github.com/marcuswestin/store.js: store.min.js.
+For more information, please read the Wiki: https://github.com/JillElaine/jquery-idleTimeout/wiki
 
-Call the idle-Timeout script in a 'document.ready' function somewhere on your site. 
+Information on all the public configuration variables here: https://github.com/JillElaine/jquery-idleTimeout/wiki/Public-Configuration-Variables
 
-Configure the 'redirectUrl' to redirect to your site's logout page.
+**Example Usage Page**
 
-Use the script with default settings, configure the options when you call the idleTimeout function at run-time, or edit the configuration variables at top of jquery-idleTimeout.js.
+Please see: https://github.com/JillElaine/jquery-idleTimeout/blob/master/example.html
 
-##### Run with Defaults
+**Example Basic Document Ready Function**
 
 ```Javascript
   $(document).ready(function () {
@@ -66,46 +75,29 @@ Use the script with default settings, configure the options when you call the id
   });
 ```
 
-##### Configuration May be Overridden at Run-Time
+**Example Site Logout Button**
 
-Please see https://github.com/JillElaine/jquery-idleTimeout/blob/master/example.html
-
-#### Additional Iframe Information
-Activity can be detected in only iframes **from the same domain** as the parent page. If you require activity detection within iframes, use the jquery-idleTimeout-iframe.min.js script. 
-
-Iframes, both single and nested, that are available within the document at time of page load are detected via a 'check-for-iframes' function, and activity within these iframes is 'bubbled' to the page body.
-
-**Dynamically Added Iframes:** Iframes added *after* the page loads require a recheck-for-iframes. 
-* Iframes, single and nested, within **dialogs are automatically rechecked** when the dialog opens. 
-* Iframes, single and nested, inserted via javascript to the **body of the document require special handling**: you must manually call the iframe recheck. Add this snippet to the function which inserts the iframe: **$.fn.idleTimeout().iframeRecheck();**
-* Note: if multiple iframes are dynamically added very quickly, it's possible that not all iframes will be included in the activity event 'bubbling'.
-
-#### Optional Functionality for Voluntary Logout
-If user voluntarily logs out of your site with your 'Logout' button (instead of timing out), you can force all 'same domain' windows/tabs to log out too! Attach a small snippet of javascript to the 'onclick' function of your 'Logout' button.
-
-##### Create 'voluntaryLogoutAll' Function to Attach to Logout Button
-
-```Javascript
-  <script type="text/javascript">
-      var voluntaryLogoutAll = function () {
-        if (store.enabled) {
-          store.set('idleTimerLoggedOut', true);
-          window.location.href = "/logout";      // redirect to this url. Set this value to YOUR site's logout page.
-        } else {
-          alert('Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js')
-        }
-      }
-  </script>
-```
-
-##### Call the 'voluntaryLogoutAll' Function with the 'onclick' of Your Logout Button
+If user voluntarily logs out of your site with your 'Logout' button (instead of timing out), you can force all 'same domain' windows and tabs to log out too! Attach this small snippet of code, **`$.fn.idleTimeout().logout();`**, to the 'onclick' function of your site's 'Logout' button. See example below.
 
 ```
-<input type="button" value="Logout" onclick="voluntaryLogoutAll()" title="This button will logout ALL 'same domain' Windows/Tabs">
+<input type="button" value="Logout" onclick="$.fn.idleTimeout().logout();" title="This button will logout ALL 'same domain' Windows & Tabs" />
 ```
+
+#### Iframe Information
+
+If you require activity detection within iframes, use the jquery-idleTimeout-iframe.min.js script. 
+
+Please read the Iframe Wiki Page: https://github.com/JillElaine/jquery-idleTimeout/wiki/Iframes---Information-&-Troubleshooting
+
+#### Troubleshooting
+
+Please read the Troubleshooting Wiki Page: https://github.com/JillElaine/jquery-idleTimeout/wiki/General-Troubleshooting
+
 ##### Possible 'mousemove' bug with Chrome browser (on Windows?)
+
 User g4g4r1n reports 'mousemove' event fires when mouse is still and offers a possible solution. 
 https://github.com/JillElaine/jquery-idleTimeout/issues/13
 
 ##### Your suggestions and bug reports are appreciated
-Use jquery-idleTimeout-for-testing.js with Firefox with Firebug add-on or similar for debugging. Thank you for your feedback.
+
+Use jquery-idleTimeout-for-testing.js with Firefox with Firebug add-on or similar for debugging. Your feedback helps to improve this plugin!

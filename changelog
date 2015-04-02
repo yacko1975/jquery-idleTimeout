@@ -1,5 +1,12 @@
 Changelog - JillElaine/jquery-idleTimeout.js
 --------------------------------------------
+v.1.0.8.1
++ Add public functions: logout & iframeRecheck
++ Modify console logs, code and variable names to make plugin more understandable
++ Make idleCheckHeartbeat a public configuration variable
++ Created workaround for bug in public function call: iframeRecheck (used defaultConfig instead of userRuntimeConfig)
++ Changed more complex polling functions to use setTimeout instead of setInterval
+
 v.1.0.8
 + Add ability to disable warning dialog. Closes issue #8.
 + Change configurable timers' units from milliseconds to seconds

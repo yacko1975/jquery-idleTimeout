@@ -7,22 +7,27 @@
  * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
  *
  * Commented and console logged for debugging with Firefox & Firebug or similar
- * version 1.0.8
+ * version 1.0.8.1
  **/
 
-/*global jQuery: false, document: false, store: false, clearInterval: false, setInterval: false, setTimeout: false, window: false, alert: false, console: false*/
+/*global jQuery: false, document: false, store: false, clearInterval: false, setInterval: false, setTimeout: false, clearTimeout: false, window: false, alert: false, console: false*/
 /*jslint indent: 2, sloppy: true, plusplus: true*/
 
 (function ($) {
 
-  $.fn.idleTimeout = function (options) {
-    console.log('start');
+  $.fn.idleTimeout = function (userRuntimeConfig) {
+
+    console.log('start of jquery-idleTimeout plugin');
+
     //##############################
     //## Public Configuration Variables
     //##############################
-    var defaults = {
+    var defaultConfig = {
+      redirectUrl: '/logout',      // redirect to this url on logout. Set to "redirectUrl: false" to disable redirect
+
+      // idle settings
       idleTimeLimit: 30,           // 30 seconds for testing. 'No activity' time limit in seconds. 1200 = 20 Minutes
-      redirectUrl: '/logout',      // redirect to this url on timeout logout. Set to "redirectUrl: false" to disable redirect
+      idleCheckHeartbeat: 2,       // Frequency to check for idle timeouts in seconds
 
       // optional custom callback to perform before logout
       customCallback: false,       // set to false for no customCallback
@@ -44,89 +49,110 @@
       dialogStayLoggedInButton: 'Stay Logged In',
       dialogLogOutNowButton: 'Log Out Now',
 
-      // error message
+      // error message if https://github.com/marcuswestin/store.js not enabled
       errorAlertMessage: 'Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js',
 
       // server-side session keep-alive timer
-      sessionKeepAliveTimer: 600,   // ping the server at this interval in seconds. 600 = 10 Minutes
-      // sessionKeepAliveTimer: false, // set to false to disable pings
+      sessionKeepAliveTimer: 600,   // ping the server at this interval in seconds. 600 = 10 Minutes. Set to false to disable pings
       sessionKeepAliveUrl: window.location.href // set URL to ping - does not apply if sessionKeepAliveTimer: false
     },
 
     //##############################
     //## Private Variables
     //##############################
-      opts = $.extend(defaults, options),
-      checkHeartbeat = 2,         // frequency to check for timeouts in seconds
+      currentConfig = $.extend(defaultConfig, userRuntimeConfig), // merge default and user runtime configuration
       origTitle = document.title, // save original browser title
-      startKeepSessionAlive, stopKeepSessionAlive, keepSession, keepAlivePing, activityDetector,
-      idleTimer, remainingTimer, checkIdleTimeout, idleTimerLastActivity, startIdleTimer, stopIdleTimer,
-      openWarningDialog, dialogTimer, checkDialogTimeout, startDialogTimer, stopDialogTimer, isDialogOpen, destroyWarningDialog,
-      countdownDisplay, logoutUser,
-      checkForIframes, includeIframes, attachEventIframe; // iframe functionality
+      storeConfiguration, // public function support, store private configuration variables
+      activityDetector,
+      startKeepSessionAlive, stopKeepSessionAlive, keepSession, keepAlivePing, // session keep alive
+      idleTimer, remainingTimer, checkIdleTimeout, checkIdleTimeoutLoop, startIdleTimer, stopIdleTimer, // idle timer
+      openWarningDialog, dialogTimer, checkDialogTimeout, startDialogTimer, stopDialogTimer, isDialogOpen, destroyWarningDialog, countdownDisplay, // warning dialog
+      logoutUser,
+      checkForIframes, includeIframes, attachEventIframe; // iframes
 
     //##############################
     //## Public Functions
     //##############################
+    // trigger a manual user logout
+    // use this code snippet on your site's Logout button: $.fn.idleTimeout().logout();
+    this.logout = function () {
+      console.log('start logout');
+      store.set('idleTimerLoggedOut', true);
+    };
+
     // trigger a recheck for iframes
-    // to use this public function on your page, call $.fn.idleTimeout().iframeRecheck()
+    // use this code snippet after an iframe is inserted into the document: $.fn.idleTimeout().iframeRecheck()
     this.iframeRecheck = function () {
-      console.log('triggered recheck for iframes');
+      console.log('start iframeRecheck');
       checkForIframes();
     };
 
     //##############################
     //## Private Functions
     //##############################
+    //----------- PUBLIC FUNCTION SUPPORT --------------//
+    // WORK AROUND - save currentConfig.activityEvents value to 'store.js' variable for use in function: attachEventIframe
+    storeConfiguration = function () {
+      console.log('store configuration - currentConfig.activityEvents ' + currentConfig.activityEvents + '.');
+      store.set('activityEvents', currentConfig.activityEvents);
+    };
+
+    //----------- KEEP SESSION ALIVE FUNCTIONS --------------//
     startKeepSessionAlive = function () {
+      console.log('start startKeepSessionAlive');
 
       keepSession = function () {
-        console.log('keep session alive function');
-        $.get(opts.sessionKeepAliveUrl);
+        console.log('startKeepSessionAlive - send ping to sessionKeepAliveUrl');
+        $.get(currentConfig.sessionKeepAliveUrl);
+        startKeepSessionAlive();
       };
 
-      keepAlivePing = setInterval(keepSession, (opts.sessionKeepAliveTimer * 1000));
+      keepAlivePing = setTimeout(keepSession, (currentConfig.sessionKeepAliveTimer * 1000));
     };
 
     stopKeepSessionAlive = function () {
       console.log('stop keep session alive function');
-      clearInterval(keepAlivePing);
+      clearTimeout(keepAlivePing);
     };
 
+    //----------- ACTIVITY DETECTION FUNCTION --------------//
     activityDetector = function () {
 
-      $('body').on(opts.activityEvents, function () {
+      $('body').on(currentConfig.activityEvents, function () {
 
-        if (!opts.enableDialog || (opts.enableDialog && isDialogOpen() !== true)) {
+        if (!currentConfig.enableDialog || (currentConfig.enableDialog && isDialogOpen() !== true)) {
           console.log('activity detected');
           startIdleTimer();
         } else {
-          console.log('dialog open. activity ignored');
+          console.log('warning dialog open. activity ignored');
         }
       });
     };
 
+    //----------- IDLE TIMER FUNCTIONS --------------//
     checkIdleTimeout = function () {
-      var timeNow = $.now(), timeIdleTimeout = (store.get('idleTimerLastActivity') + (opts.idleTimeLimit * 1000));
 
-      if (timeNow > timeIdleTimeout) {
-        console.log('timeNow: ' + timeNow + ' > idle ' + timeIdleTimeout);
+      var timeIdleTimeout = (store.get('idleTimerLastActivity') + (currentConfig.idleTimeLimit * 1000));
 
-        if (!opts.enableDialog) { // warning dialog is disabled
+      if ($.now() > timeIdleTimeout) {
+        console.log('inactivity has exceed the idleTimeLimit');
+
+        if (!currentConfig.enableDialog) { // warning dialog is disabled
           console.log('warning dialog disabled - log out user without warning');
           logoutUser(); // immediately log out user when user is idle for idleTimeLimit
-        } else if (opts.enableDialog && isDialogOpen() !== true) {
-          console.log('dialog is not open & will be opened');
+        } else if (currentConfig.enableDialog && isDialogOpen() !== true) {
+          console.log('warning dialog is not open & will be opened');
           openWarningDialog();
-          startDialogTimer();
+          startDialogTimer(); // start timing the warning dialog
         }
       } else if (store.get('idleTimerLoggedOut') === true) { //a 'manual' user logout?
-        console.log('user may have manually logged out? Log out all windows & tabs now.');
+        console.log('user has manually logged out? Log out all windows & tabs now.');
         logoutUser();
       } else {
-        console.log('idle not yet timed out');
-        if (opts.enableDialog && isDialogOpen() === true) {
-          console.log('dialog is open & will be closed');
+        console.log('inactivity has not yet exceed the idleTimeLimit');
+
+        if (currentConfig.enableDialog && isDialogOpen() === true) {
+          console.log('warning dialog is open & will be closed');
           destroyWarningDialog();
           stopDialogTimer();
         }
@@ -134,23 +160,32 @@
     };
 
     startIdleTimer = function () {
+      console.log('start startIdleTimer');
       stopIdleTimer();
-      idleTimerLastActivity = $.now();
-      store.set('idleTimerLastActivity', idleTimerLastActivity);
-      console.log('start idle timer: ' + idleTimerLastActivity);
-      idleTimer = setInterval(checkIdleTimeout, (checkHeartbeat * 1000));
+      store.set('idleTimerLastActivity', $.now());
+      checkIdleTimeoutLoop();
+    };
+
+    // continually check if user inactivity has exceeded the idleTimeLimit
+    checkIdleTimeoutLoop = function () {
+      checkIdleTimeout();
+      idleTimer = setTimeout(checkIdleTimeoutLoop, (currentConfig.idleCheckHeartbeat * 1000));
     };
 
     stopIdleTimer = function () {
-      clearInterval(idleTimer);
+      console.log('start stopIdleTimer');
+      clearTimeout(idleTimer);
     };
 
+    //----------- WARNING DIALOG FUNCTIONS --------------//
     openWarningDialog = function () {
-      var dialogContent = "<div id='idletimer_warning_dialog'><p>" + opts.dialogText + "</p><p style='display:inline'>" + opts.dialogTimeRemaining + ": <div style='display:inline' id='countdownDisplay'></div></p></div>";
+      console.log('start openWarningDialog');
+
+      var dialogContent = "<div id='idletimer_warning_dialog'><p>" + currentConfig.dialogText + "</p><p style='display:inline'>" + currentConfig.dialogTimeRemaining + ": <div style='display:inline' id='countdownDisplay'></div></p></div>";
 
       $(dialogContent).dialog({
         buttons: [{
-          text: opts.dialogStayLoggedInButton,
+          text: currentConfig.dialogStayLoggedInButton,
           click: function () {
             console.log('Stay Logged In button clicked');
             destroyWarningDialog();
@@ -159,7 +194,7 @@
           }
         },
           {
-            text: opts.dialogLogOutNowButton,
+            text: currentConfig.dialogLogOutNowButton,
             click: function () {
               console.log('Log Out Now button clicked');
               logoutUser();
@@ -168,7 +203,7 @@
           ],
         closeOnEscape: false,
         modal: true,
-        title: opts.dialogTitle,
+        title: currentConfig.dialogTitle,
         open: function () {
           //hide the dialog's upper right corner "x" close button
           $(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
@@ -179,19 +214,19 @@
       countdownDisplay();
 
       // change title bar to warning message
-      document.title = opts.dialogTitle;
+      document.title = currentConfig.dialogTitle;
 
       // if keep-alive is enabled, stop the session keep-alive ping
-      if (opts.sessionKeepAliveTimer) {
+      if (currentConfig.sessionKeepAliveTimer) {
         stopKeepSessionAlive();
       }
     };
 
     checkDialogTimeout = function () {
-      var timeNow = $.now(), timeDialogTimeout = (store.get('idleTimerLastActivity') + (opts.idleTimeLimit * 1000) + (opts.dialogDisplayLimit * 1000));
+      var timeDialogTimeout = (store.get('idleTimerLastActivity') + (currentConfig.idleTimeLimit * 1000) + (currentConfig.dialogDisplayLimit * 1000));
 
-      if ((timeNow > timeDialogTimeout) || (store.get('idleTimerLoggedOut') === true)) {
-        console.log('timeNow: ' + timeNow + ' > dialog' + timeDialogTimeout);
+      if (($.now() > timeDialogTimeout) || (store.get('idleTimerLoggedOut') === true)) {
+        console.log('warning dialog is open and user has remained inactive for the dialogDisplayLimit. Time to log out user.');
         logoutUser();
       } else {
         console.log('dialog not yet timed out');
@@ -199,11 +234,12 @@
     };
 
     startDialogTimer = function () {
-      dialogTimer = setInterval(checkDialogTimeout, (checkHeartbeat * 1000));
+      console.log('start startDialogTimer');
+      dialogTimer = setTimeout(checkDialogTimeout, (currentConfig.idleCheckHeartbeat * 1000));
     };
 
     stopDialogTimer = function () {
-      clearInterval(dialogTimer);
+      clearTimeout(dialogTimer);
       clearInterval(remainingTimer);
     };
 
@@ -217,19 +253,19 @@
     };
 
     destroyWarningDialog = function () {
-      console.log('dialog destroyed');
+      console.log('start destroyWarningDialog');
       $("#idletimer_warning_dialog").dialog('destroy').remove();
       document.title = origTitle;
 
       // if keep-alive is enabled, restart the session keep-alive ping 
-      if (opts.sessionKeepAliveTimer) {
+      if (currentConfig.sessionKeepAliveTimer) {
         startKeepSessionAlive();
       }
     };
 
     // display remaining time on warning dialog
     countdownDisplay = function () {
-      var dialogDisplaySeconds = opts.dialogDisplayLimit, mins, secs;
+      var dialogDisplaySeconds = currentConfig.dialogDisplayLimit, mins, secs;
 
       remainingTimer = setInterval(function () {
         mins = Math.floor(dialogDisplaySeconds / 60); // minutes
@@ -241,37 +277,42 @@
       }, 1000);
     };
 
+    //----------- LOGOUT USER FUNCTION --------------//
     logoutUser = function () {
-      console.log('logout function');
+      console.log('start logoutUser');
       store.set('idleTimerLoggedOut', true);
 
-      if (opts.sessionKeepAliveTimer) {
+      if (currentConfig.sessionKeepAliveTimer) {
         stopKeepSessionAlive();
       }
 
-      if (opts.customCallback) {
+      if (currentConfig.customCallback) {
         console.log('logout function custom callback');
-        opts.customCallback();
+        currentConfig.customCallback();
       }
 
-      if (opts.redirectUrl) {
+      if (currentConfig.redirectUrl) {
         console.log('logout function redirect to URL');
-        window.location.href = opts.redirectUrl;
+        window.location.href = currentConfig.redirectUrl;
       }
     };
 
-    // triggered when a dialog is opened
+    //----------- IFRAME FUNCTIONS --------------//
+    // triggered when a dialog is opened, recheck for iframes
     $("body").on("dialogopen", function () {
-      if (opts.enableDialog && isDialogOpen() !== true) {
-        console.log('dialog (not the idleTimeout warning dialog) opened. Recheck for iframes.');
+      console.log('start body dialogopen');
+
+      if (currentConfig.enableDialog && isDialogOpen() !== true) {
+        console.log('a dialog (not the idleTimeout warning dialog) opened. Recheck for iframes.');
         checkForIframes();
       } else {
-        console.log('IdleTimeout warning dialog opened. No recheck for iframes.');
+        console.log('warning dialog opened. No recheck for iframes.');
       }
     });
 
-    // document must be in readyState 'complete' before looking for iframes
+    // document must be in readyState 'complete' before checking for iframes - $(document).ready() is not good enough!
     checkForIframes = function () {
+      console.log('start checkForIframes');
 
       var docReadyCheck, isDocReady;
 
@@ -283,12 +324,11 @@
         }
       };
 
-      isDocReady = setInterval(docReadyCheck, 1000);
+      isDocReady = setInterval(docReadyCheck, 1000); // check once a second to see if document is complete
     };
 
     // find and include iframes
     includeIframes = function (elementContents) {
-
       console.log('start includeIframes');
 
       if (!elementContents) {
@@ -299,7 +339,6 @@
       var iframeCount = 0;
 
       elementContents.find('iframe,frame').each(function () {
-
         console.log('start of find iframes');
 
         if ($(this).hasClass('jit-inspected') === false) {
@@ -310,8 +349,10 @@
 
             includeIframes($(this).contents()); // recursive call to include nested iframes
 
+            // attach event code for most modern browsers
             $(this).on('load', attachEventIframe($(this))); // Browser NOT IE < 11
 
+            // attach event code for older Internet Explorer browsers
             console.log('iframeCount: ' + iframeCount + '.');
             var domElement = $(this)[iframeCount]; // convert jquery object to dom element
 
@@ -323,8 +364,15 @@
             iframeCount++;
 
           } catch (err) {
-            console.log('found cross-site iframe - add class jit-inspected and ignore');
-            $(this).addClass('cross-site jit-inspected');
+            /* Unfortunately, if the 'includeIframes' function is manually triggered multiple times in quick succession,
+             * this 'try/catch' block may not have time to complete,
+             * and so it might error out, 
+             * and iframes that are NOT cross-site may be set to "cross-site"
+             * and activity may or may not bubble to parent page.
+             * Fortunately, this is a rare occurrence!
+             */
+            console.log('found cross-site iframe - add classes "jit-inspected" & "cross-site"');
+            $(this).addClass('jit-inspected cross-site');
           }
 
         } else {
@@ -337,17 +385,26 @@
 
     // attach events to each iframe
     attachEventIframe = function (iframeItem) {
+      console.log('start attachEventIframe');
 
-      console.log('attach activity events to iframe');
+      // retrieve stored value as currentConfig will not include private userRuntimeConfig
+      // when this function is called by public function, iframeRecheck
+      console.log('currentConfig.activityEvents: ' + currentConfig.activityEvents + '.');
+      var iframeContents = iframeItem.contents(), storeActivityEvents = store.get('activityEvents');
 
-      var iframe = iframeItem.contents();
+      try {
 
-      iframe.on(opts.activityEvents, function (event) {
-        console.log('bubbling iframe activity event to body of page');
-        $('body').trigger(event);
-      });
+        iframeContents.on(storeActivityEvents, function (event) {
+          console.log('bubbling iframe activity event to body of page event: ' + event.type + '.');
+          $('body').trigger(event);
+        });
 
-      iframeItem.addClass('jit-inspected');
+        iframeItem.addClass('jit-inspected'); // add "jit-inspected" class, so we don't need to check this iframe again
+
+      } catch (err) {
+        console.log('problem with attachment of activity events to this iframe');
+      }
+
     };
 
     //###############################
@@ -357,22 +414,27 @@
     return this.each(function () {
 
       if (store.enabled) {
-        idleTimerLastActivity = $.now();
-        store.set('idleTimerLastActivity', idleTimerLastActivity);
+
+        store.set('idleTimerLastActivity', $.now());
         store.set('idleTimerLoggedOut', false);
+
+        storeConfiguration();
+
+        activityDetector();
+
+        if (currentConfig.sessionKeepAliveTimer) {
+          startKeepSessionAlive();
+        }
+
+        startIdleTimer();
+
+        checkForIframes();
+
       } else {
-        alert(opts.errorAlertMessage);
+        console.log('store.js not enabled, or browser "private mode"?');
+        alert(currentConfig.errorAlertMessage);
       }
 
-      activityDetector();
-
-      if (opts.sessionKeepAliveTimer) {
-        startKeepSessionAlive();
-      }
-
-      startIdleTimer();
-
-      checkForIframes();
     });
   };
 }(jQuery));
