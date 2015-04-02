@@ -22,8 +22,8 @@
       $(document).ready(function () {
 
 	$(document).idleTimeout({
-	  idleTimeLimit: 15,            // 15 seconds 'No activity' time limit in seconds.
 	  redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
+          idleTimeLimit: 15,            // 15 seconds 'No activity' time limit in seconds.
 	  activityEvents: 'click keypress scroll wheel mousewheel',    // separate each event with a space
 	  dialogDisplayLimit: 30,       // Time to display the warning dialog before logout (and optional callback) in seconds
 	  sessionKeepAliveTimer: false  // Set to false to disable pings.
@@ -33,15 +33,6 @@
       
       var voluntaryLogoutOne = function () {
 	window.location.href = "https://github.com/JillElaine/jquery-idleTimeout";
-      };
-
-      var voluntaryLogoutAll = function () {
-	if (store.enabled) {
-	  store.set('idleTimerLoggedOut', true);
-	  voluntaryLogoutOne();
-	} else {
-	  alert('Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js');
-	}
       };
     </script>
   </head>
@@ -63,10 +54,10 @@
 	<h4><a href="http://jillelaine.github.io/jquery-idleTimeout/index.html" target="_blank">Try it! Click here to open another browser window/tab of this page.</a></h4>
 
 	<ul>
-	  <li>If a window/tab is logged out, all other windows/tabs will log out too.</li>
-	  <li>If the warning dialog box is not disabled, if warning dialog appears on one window/tab, warning dialog appears on all other 'same domain' windows/tabs too.</li>
-	  <li>If 'Stay Logged In' button on warning dialog is clicked, warning dialogs on all 'same domain' windows/tabs will be dismissed too.</li>
-	  <li>If 'Log Out Now' button on warning dialog is clicked, all 'same domain' windows/tabs will log out too.</li>
+	  <li>If a window/tab is logged out, all other windows & tabs will log out too.</li>
+	  <li>If warning dialog appears on one window or tab, warning dialog appears on all other 'same domain' windows & tabs too.</li>
+	  <li>If 'Stay Logged In' button on warning dialog is clicked, warning dialogs on all 'same domain' windows & tabs will be dismissed too.</li>
+	  <li>If 'Log Out Now' button on warning dialog is clicked, all 'same domain' windows & tabs will log out too.</li>
 	</ul>
 
 	<h3>Requirements</h3>
@@ -89,14 +80,14 @@
 	    </ul>
 	  <li>If the warning dialog is enabled:</li>
 	    <ul>
-	      <li>If no activity events are detected on any 'same domain' windows/tabs within the 'idleTimeLimit', warning dialog will appear will appear on all 'same domain' windows/tabs.</li>
-	      <li>If the warning dialog is not disabled, the browser title changes on all 'same domain' windows/tabs when the warning dialog appears, and reverts back to the original title(s) if the warning dialog is dismissed.</li>
-	      <li>Warning dialog box includes 'time remaining to logout' countdown timer</li>
-	      <li>If neither button on the warning dialog box is clicked within the 'dialogDisplayLimit', all 'same domain' windows/tabs will logout.</li>
+	      <li>If no activity events are detected on any 'same domain' windows & tabs within the 'idleTimeLimit', warning dialog will appear will appear on all 'same domain' windows/tabs.</li>
+	      <li>If the warning dialog is not disabled, the browser title changes on all 'same domain' windows & tabs when the warning dialog appears, and reverts back to the original title(s) if the warning dialog is dismissed.</li>
+	      <li>Warning dialog box includes 'Time Remaining' countdown timer</li>
+	      <li>If neither button on the warning dialog box is clicked within the 'dialogDisplayLimit', all 'same domain' windows & tabs will logout.</li>
 	    </ul>
 	  <li>If the warning dialog is disabled:</li>
 	    <ul>
-	      <li>If no activity events are detected on any 'same domain' windows/tabs within the 'idleTimeLimit', all 'same domain' windows/tabs will logout.</li>
+	      <li>If no activity events are detected on any 'same domain' windows & tabs within the 'idleTimeLimit', all 'same domain' windows & tabs will logout.</li>
 	      <li>User will receive no warning before logout</li>
 	    </ul>
 	</ul>
@@ -111,33 +102,22 @@
 	  Try it! Click here to open another browser window/tab of this page and then try the two 'Logout' buttons below.
 	</a></h4>
 
-	<h3>Voluntary Logout - Optional Functionality</h3>
+	<h3>Your Site's Logout Button - Configuration</h3>
 
 	<div>
-	  <input type="button" value="Logout All Windows/Tabs" onclick="voluntaryLogoutAll()" title="This button will logout ALL 'same domain' Windows/Tabs"
-	    class="button logoutall float_left" id="logoutAll">
+          <input type="button" value="Logout All Windows & Tabs" onclick="$.fn.idleTimeout().logout();" title="This button will logout ALL open 'same domain' Windows & Tabs" class="button logoutall float_left" />
 	  &nbsp;&nbsp;&nbsp;&nbsp;
 	  <input type="button" value="Logout Only This Window/Tab" onclick="voluntaryLogoutOne()" title="This button will logout only the current Window/Tab"
 	    class="button logoutone float_left" id="logoutOne">
 	</div>
 
-	<p style="clear:left">If user voluntarily logs out of your site with your 'Logout' button (instead of timing out),
-	you can force all 'same domain' windows/tabs to also log out too!
-	Add a small snippet of javascript to the 'onclick' function of your 'Logout' button.</p>
-
-	<p><strong>Optional 'Voluntary Logout' Script</strong></p>
-	<p>
-	  &lt;script type="text/javascript"&gt;
-	    <br />&nbsp;&nbsp;$(document).ready(function () {
-	      <br />&nbsp;&nbsp;&nbsp;&nbsp;if (store.enabled) {
-		<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;store.set('idleTimerLoggedOut', true);
-		<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window.location.href = "https://github.com/JillElaine/jquery-idleTimeout";
-	      <br />&nbsp;&nbsp;&nbsp;&nbsp;} else {
-		<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('Please disable "Private Mode", or upgrade to a modern browser. Or perhaps a dependent file missing. Please see: https://github.com/marcuswestin/store.js');
-	      <br />&nbsp;&nbsp;&nbsp;&nbsp;}
-	    <br />&nbsp;&nbsp;});
-	  <br />&lt;/script&gt;
-	</p>
+	<p style="clear:left">If user voluntarily logs out of your site with your site's 'Logout' button (instead of timing out), you can force all 'same domain' windows & tabs to also log out too! Use this small snippet of code, <strong>$.fn.idleTimeout().logout();</strong>, on the 'onclick' function of your 'Logout' button.</p>
+	
+	<p><strong>Example Logout Button</strong></p>
+	
+	<pre>
+	&lt;input type="button" value="Logout All Windows/Tabs" onclick="$.fn.idleTimeout().logout();" title="This button will logout ALL open 'same domain' Windows and Tabs" class="button logoutall float_left" /&gt;
+	</pre>
 
 	<h3>The Demo Runtime Configuration</h3>
 	<ul>
@@ -153,8 +133,8 @@
 	  &lt;script type="text/javascript" charset="utf-8"&gt;
 	  <br />&nbsp;&nbsp;$(document).ready(function () {
 	    <br />&nbsp;&nbsp;&nbsp;&nbsp;$(document).idleTimeout({
-	      <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idleTimeLimit: 15,        // 15 seconds
 	      <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
+	      <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idleTimeLimit: 15,        // 15 seconds
 	      <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;activityEvents: 'click keypress scroll wheel mousewheel', // separate each event with a space
 	      <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dialogDisplayLimit: 30,   // Time to display the warning dialog before logout (and optional callback) in seconds
 	      <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sessionKeepAliveTimer: false // Set to false to disable pings.

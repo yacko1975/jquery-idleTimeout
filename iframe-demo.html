@@ -22,8 +22,8 @@
       $(document).ready(function () {
 
 	$(document).idleTimeout({
+          redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
 	  idleTimeLimit: 60,            // 60 seconds 'No activity' time limit in seconds.
-	  redirectUrl: 'https://github.com/JillElaine/jquery-idleTimeout',       // redirect to this url
 	  activityEvents: 'click keypress',    // separate each event with a space
 	  dialogDisplayLimit: 30,       // Time to display the warning dialog before logout (and optional callback) in seconds
 	  sessionKeepAliveTimer: false  // Set to false to disable pings.
@@ -45,7 +45,7 @@
 	
 	<h3>Functions across multiple windows, tabs <strong>AND IFRAMES</strong> within the same domain</h3>
 	
-	<p>Activity events detected, as configured by the idle-Timeout setup on this demonstration page, are clicks and keypresses ONLY. To see the 'idle timeout' functionality, do not press any keys, click your mouse or scroll your mousewheel for <strong>60 seconds</strong>.</p>
+	<p>Activity events detected, as configured by the idle-Timeout setup <i>on this demonstration page</i>, are clicks and keypresses ONLY. To see the 'idle timeout' functionality, do not press any keys or click your mouse for <strong>60 seconds</strong>.</p>
 	
 	<h3>Demonstrates the 'Bubbling' of Activity Events</h3>
 	  <ul>
