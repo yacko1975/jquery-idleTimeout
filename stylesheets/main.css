@@ -87,14 +87,14 @@ td {
   clear: both;
 }
 .add {
-  background: #858585 url("https://github.com/JillElaine/jquery-idleTimeout/blob/gh-pages/add.png") no-repeat scroll 4px 3px ;
+  background: #858585 url("https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/gh-pages/add.png") no-repeat scroll 4px 3px ;
 }
 .close {
-  background: url("https://github.com/JillElaine/jquery-idleTimeout/blob/gh-pages/close.png") no-repeat scroll 4px 3px #858585;
+  background: url("https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/gh-pages/close.png") no-repeat scroll 4px 3px #858585;
 }
 .logoutall {
-  background: url("https://github.com/JillElaine/jquery-idleTimeout/blob/gh-pages/logout_green.png") no-repeat scroll 4px 3px #858585;
+  background: url("https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/gh-pages/logout_green.png") no-repeat scroll 4px 3px #858585;
 }
 .logoutone {
-  background: url("https://github.com/JillElaine/jquery-idleTimeout/blob/gh-pages/logout_red.png") no-repeat scroll 4px 3px #858585;
+  background: url("https://raw.githubusercontent.com/JillElaine/jquery-idleTimeout/gh-pages/logout_red.png") no-repeat scroll 4px 3px #858585;
 }
