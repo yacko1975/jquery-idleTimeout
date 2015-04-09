@@ -17,7 +17,11 @@
   },
   "keywords": [
     "jquery-plugin",
-    "ecosystem:jquery"
+    "ecosystem:jquery",
+    "idle",
+    "multiple windows",
+    "timer",
+    "logout redirect"
   ],
   "dependencies": {
     "JQuery": ">1.7",
