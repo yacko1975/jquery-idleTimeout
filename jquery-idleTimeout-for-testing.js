@@ -13,7 +13,7 @@
  * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
  *
  * Commented and console logged for debugging with Firefox & Firebug or similar
- * version 1.0.8.2
+ * version 1.0.8
  **/
 
 /*global jQuery: false, document: false, store: false, clearInterval: false, setInterval: false, setTimeout: false, clearTimeout: false, window: false, alert: false, console: false*/
