@@ -1,5 +1,5 @@
 {
-  "name": "jquery-idleTimeout",
+  "name": "jquery-idletimeout",
   "version": "1.0.8",
   "description": "JQuery IdleTimeout Plugin for multiple windows, tabs and, optionally, iframes",
   "main": "jquery-idleTimeout",
