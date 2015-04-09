@@ -1,5 +1,8 @@
 Changelog - JillElaine/jquery-idleTimeout.js
 --------------------------------------------
+v.1.0.8.2
++ Revert to CreativeCommons license
+
 v.1.0.8.1
 + Add public functions: logout & iframeRecheck
 + Modify console logs, code and variable names to make plugin more understandable

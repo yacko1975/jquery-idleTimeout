@@ -1,12 +1,18 @@
 /**
- * This work is licensed under the MIT License
+ * This work is licensed under the Creative Commons Attribution-Share Alike 3.0
+ * United States License. To view a copy of this license,
+ * visit http://creativecommons.org/licenses/by-sa/3.0/us/ or send a letter
+ * to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
+ *
+ * Modified by: Jill Elaine
+ * Email: jillelaine01@gmail.com
  *
  * Configurable idle (no activity) timer and logout redirect for jQuery.
  * Works across multiple windows, tabs and iframes from the same domain.
  *
  * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
  *
- * version 1.0.8.1
+ * version 1.0.8.2
  **/
 
 /*global jQuery: false, document: false, store: false, clearInterval: false, setInterval: false, setTimeout: false, clearTimeout: false, window: false, alert: false*/
