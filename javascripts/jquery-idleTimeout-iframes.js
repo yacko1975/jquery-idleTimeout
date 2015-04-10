@@ -12,7 +12,7 @@
  *
  * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
  *
- * version 1.0.8.2
+ * version 1.0.9
  **/
 
 /*global jQuery: false, document: false, store: false, clearInterval: false, setInterval: false, setTimeout: false, clearTimeout: false, window: false, alert: false*/
@@ -29,7 +29,7 @@
       redirectUrl: '/logout',      // redirect to this url on logout. Set to "redirectUrl: false" to disable redirect
 
       // idle settings
-      idleTimeLimit: 1200,           // 'No activity' time limit in seconds. 1200 = 20 Minutes
+      idleTimeLimit: 1200,         // 'No activity' time limit in seconds. 1200 = 20 Minutes
       idleCheckHeartbeat: 2,       // Frequency to check for idle timeouts in seconds
 
       // optional custom callback to perform before logout
