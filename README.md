@@ -8,9 +8,9 @@ Listed on [NPM](https://www.npmjs.com/package/jquery-idletimeout) and [JQuery's 
 
 Requires [Marcus Westin's store.js](https://github.com/marcuswestin/store.js) which uses localStorage, globalStorage and userData behavior to 'communicate' across multiple browser windows & tabs without cookies or flash.
 
-** [Basic Demo Page](http://jillelaine.github.io/jquery-idleTimeout/) and [Iframes Demo Page](http://jillelaine.github.io/jquery-idleTimeout/iframe-demo.html) **
+**[Basic Demo Page](http://jillelaine.github.io/jquery-idleTimeout/) and [Iframes Demo Page](http://jillelaine.github.io/jquery-idleTimeout/iframe-demo.html)**
 
-** [Informative Wiki Pages!](https://github.com/JillElaine/jquery-idleTimeout/wiki) **
+**[Informative Wiki Pages!](https://github.com/JillElaine/jquery-idleTimeout/wiki)**
 
 #### Communication Across Multiple Browser Windows, Tabs and Iframes
 
@@ -57,9 +57,9 @@ Requires [Marcus Westin's store.js](https://github.com/marcuswestin/store.js) wh
 
 For lots more information, please read the [Wiki](https://github.com/JillElaine/jquery-idleTimeout/wiki)
 
-Detailed information on all the ** [Public Configuration Variables](https://github.com/JillElaine/jquery-idleTimeout/wiki/Public-Configuration-Variables) **.
+Detailed information on all the **[Public Configuration Variables](https://github.com/JillElaine/jquery-idleTimeout/wiki/Public-Configuration-Variables)**.
 
-** [Example Usage Page](https://github.com/JillElaine/jquery-idleTimeout/blob/master/example.html) **
+**[Example Usage Page](https://github.com/JillElaine/jquery-idleTimeout/blob/master/example.html)**
 
 **Example Basic Document Ready Function**
 
@@ -76,7 +76,7 @@ Detailed information on all the ** [Public Configuration Variables](https://gith
 If user voluntarily logs out of your site with your 'Logout' button (instead of timing out), you can force all 'same domain' windows and tabs to log out too! Attach this small snippet of code, **`$.fn.idleTimeout().logout();`**, to the 'onclick' function of your site's 'Logout' button. See example below.
 
 ```
-<input value="Logout" onclick="$.fn.idleTimeout().logout();" type="button" title="Logout ALL 'same domain' Windows & Tabs" />
+<input value="Logout" onclick="$.fn.idleTimeout().logout();" type="button" title="Logout ALL Windows & Tabs" />
 ```
 
 #### Iframe Information
