@@ -1,5 +1,8 @@
 Changelog - JillElaine/jquery-idleTimeout.js
 --------------------------------------------
+v.1.0.9
++ Update README for NPM markdown
+
 v.1.0.8
 + Add public functions: logout & iframeRecheck
 + Modify console logs, code and variable names to make plugin more understandable
