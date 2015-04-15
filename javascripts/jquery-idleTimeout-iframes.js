@@ -210,11 +210,11 @@
     };
 
     startDialogTimer = function () {
-      dialogTimer = setTimeout(checkDialogTimeout, (currentConfig.idleCheckHeartbeat * 1000));
+      dialogTimer = setInterval(checkDialogTimeout, (currentConfig.idleCheckHeartbeat * 1000));
     };
 
     stopDialogTimer = function () {
-      clearTimeout(dialogTimer);
+      clearInterval(dialogTimer);
       clearInterval(remainingTimer);
     };
 
