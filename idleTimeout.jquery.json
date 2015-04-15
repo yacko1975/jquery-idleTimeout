@@ -14,8 +14,7 @@
   ],
   "licenses": [
     {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/mit-license.php"
+      "type": "CC-BY-SA-3.0"
     }
   ],
   "dependencies": {

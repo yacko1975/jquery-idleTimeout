@@ -13,7 +13,7 @@
  * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
  *
  * Commented and console logged for debugging with Firefox & Firebug or similar
- * version 1.0.9
+ * version 1.0.10
  **/
 
 /*global jQuery: false, document: false, store: false, clearInterval: false, setInterval: false, setTimeout: false, clearTimeout: false, window: false, alert: false, console: false*/
@@ -141,7 +141,7 @@
       var timeIdleTimeout = (store.get('idleTimerLastActivity') + (currentConfig.idleTimeLimit * 1000));
 
       if ($.now() > timeIdleTimeout) {
-        console.log('inactivity has exceed the idleTimeLimit');
+        console.log('inactivity has exceeded the idleTimeLimit');
 
         if (!currentConfig.enableDialog) { // warning dialog is disabled
           console.log('warning dialog disabled - log out user without warning');
@@ -155,7 +155,7 @@
         console.log('user has manually logged out? Log out all windows & tabs now.');
         logoutUser();
       } else {
-        console.log('inactivity has not yet exceed the idleTimeLimit');
+        console.log('inactivity has not yet exceeded the idleTimeLimit');
 
         if (currentConfig.enableDialog && isDialogOpen() === true) {
           console.log('warning dialog is open & will be closed');
@@ -241,11 +241,11 @@
 
     startDialogTimer = function () {
       console.log('start startDialogTimer');
-      dialogTimer = setTimeout(checkDialogTimeout, (currentConfig.idleCheckHeartbeat * 1000));
+      dialogTimer = setInterval(checkDialogTimeout, (currentConfig.idleCheckHeartbeat * 1000));
     };
 
     stopDialogTimer = function () {
-      clearTimeout(dialogTimer);
+      clearInterval(dialogTimer);
       clearInterval(remainingTimer);
     };
 
