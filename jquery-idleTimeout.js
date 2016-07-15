@@ -10,9 +10,12 @@
  * Configurable idle (no activity) timer and logout redirect for jQuery.
  * Works across multiple windows and tabs from the same domain.
  *
- * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+
+ * Dependencies: JQuery v1.7+, JQuery UI, store.js from https://github.com/marcuswestin/store.js - v1.3.4+, uri.js from https://medialize.github.io/URI.js/
  *
  * version 1.0.10
+ * 
+ * This version allows for a query string to be added based on if the user clicked to logout or timed out, and the option to include the original in the querystring
+
  **/
 
 /*global jQuery: false, document: false, store: false, clearInterval: false, setInterval: false, setTimeout: false, clearTimeout: false, window: false, alert: false*/
@@ -26,8 +29,10 @@
     //## Public Configuration Variables
     //##############################
     var defaultConfig = {
-      redirectUrl: '/logout',      // redirect to this url on logout. Set to "redirectUrl: false" to disable redirect
-
+      redirectURL: '/logout',      // redirect to this url on logout. Set to "redirectUrl: false" to disable redirect
+      timeoutQuery: false,  //url Query used for timeout logout false to not include
+      buttonQuery: false,  //url Query used for logout using the button false to not include
+      ReturnURLQuery: false, //Variable to be used to pass the return URL in the query string to the logout page false to disable
       // idle settings
       idleTimeLimit: 1200,           // 'No activity' time limit in seconds. 1200 = 20 Minutes
       idleCheckHeartbeat: 2,       // Frequency to check for idle timeouts in seconds
@@ -35,7 +40,7 @@
       // optional custom callback to perform before logout
       customCallback: false,       // set to false for no customCallback
       // customCallback:    function () {    // define optional custom js function
-          // perform custom action before logout
+      // perform custom action before logout
       // },
 
       // configure which activity events to detect
@@ -118,13 +123,13 @@
       if ($.now() > timeIdleTimeout) {
 
         if (!currentConfig.enableDialog) { // warning dialog is disabled
-          logoutUser(); // immediately log out user when user is idle for idleTimeLimit
+          logoutUser(false); // immediately log out user when user is idle for idleTimeLimit
         } else if (currentConfig.enableDialog && isDialogOpen() !== true) {
           openWarningDialog();
           startDialogTimer(); // start timing the warning dialog
         }
       } else if (store.get('idleTimerLoggedOut') === true) { //a 'manual' user logout?
-        logoutUser();
+        logoutUser(true);
       } else {
 
         if (currentConfig.enableDialog && isDialogOpen() === true) {
@@ -166,12 +171,14 @@
           {
             text: currentConfig.dialogLogOutNowButton,
             click: function () {
-              logoutUser();
+              logoutUser(true);
             }
           }
-          ],
+        ],
         closeOnEscape: false,
         modal: true,
+        width: 400,
+        dialogClass: "alert",
         title: currentConfig.dialogTitle,
         open: function () {
           $(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
@@ -191,7 +198,7 @@
       var timeDialogTimeout = (store.get('idleTimerLastActivity') + (currentConfig.idleTimeLimit * 1000) + (currentConfig.dialogDisplayLimit * 1000));
 
       if (($.now() > timeDialogTimeout) || (store.get('idleTimerLoggedOut') === true)) {
-        logoutUser();
+        logoutUser(false);
       }
     };
 
@@ -236,7 +243,7 @@
     };
 
     //----------- LOGOUT USER FUNCTION --------------//
-    logoutUser = function () {
+    logoutUser = function (button) {
       store.set('idleTimerLoggedOut', true);
 
       if (currentConfig.sessionKeepAliveTimer) {
@@ -247,8 +254,25 @@
         currentConfig.customCallback();
       }
 
-      if (currentConfig.redirectUrl) {
-        window.location.href = currentConfig.redirectUrl;
+      if (currentConfig.redirectURL) {
+        var uri = new URI(currentConfig.redirectURL);
+        var uriCurrent = new URI();
+        if (button) {
+          if (currentConfig.buttonQuery) {
+            uri.search(currentConfig.buttonQuery);
+          }
+        }
+        else {
+          if (currentConfig.timeoutQuery) {
+            uri.search(currentConfig.timeoutQuery);
+          }
+        }
+        if (currentConfig.ReturnURLQuery) {
+          uri.addSearch(currentConfig.ReturnURLQuery, uriCurrent.resource())
+        }
+
+
+        window.location.href = uri;
       }
     };
 
