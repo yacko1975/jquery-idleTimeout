@@ -29,10 +29,10 @@
     //## Public Configuration Variables
     //##############################
     var defaultConfig = {
-      redirectURL: '/logout',      // redirect to this url on logout. Set to "redirectUrl: false" to disable redirect
+      redirectUrl: '/logout',      // redirect to this url on logout. Set to "redirectUrl: false" to disable redirect
       timeoutQuery: false,  //url Query used for timeout logout false to not include
       buttonQuery: false,  //url Query used for logout using the button false to not include
-      ReturnURLQuery: false, //Variable to be used to pass the return URL in the query string to the logout page false to disable
+      ReturnUrlQuery: false, //Variable to be used to pass the return URL in the query string to the logout page false to disable
       // idle settings
       idleTimeLimit: 1200,           // 'No activity' time limit in seconds. 1200 = 20 Minutes
       idleCheckHeartbeat: 2,       // Frequency to check for idle timeouts in seconds
@@ -254,8 +254,8 @@
         currentConfig.customCallback();
       }
 
-      if (currentConfig.redirectURL) {
-        var uri = new URI(currentConfig.redirectURL);
+      if (currentConfig.redirectUrl) {
+        var uri = new URI(currentConfig.redirectUrl);
         var uriCurrent = new URI();
         if (button) {
           if (currentConfig.buttonQuery) {
@@ -267,8 +267,8 @@
             uri.search(currentConfig.timeoutQuery);
           }
         }
-        if (currentConfig.ReturnURLQuery) {
-          uri.addSearch(currentConfig.ReturnURLQuery, uriCurrent.resource())
+        if (currentConfig.ReturnUrlQuery) {
+          uri.addSearch(currentConfig.ReturnUrlQuery, uriCurrent.resource())
         }
 
 
